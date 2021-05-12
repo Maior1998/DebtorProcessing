@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using DebtorProcessing.Services;
-
+using DebtorProcessing.ViewModel;
+using DebtorsDbModel;
+using DebtorsDbModel.Model;
 using Microsoft.Extensions.DependencyInjection;
 
 using OfficeOpenXml;
@@ -38,7 +40,19 @@ namespace DebtorProcessing
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<SessionService>();
+            services.AddSingleton<PageService>();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<DebtorsTableViewModel>();
 
+
+
+
+
+
+
+            DbModel model = new DbModel();
+            DbModel.CreateTestData(model);
         }
     }
 }

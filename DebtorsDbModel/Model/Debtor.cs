@@ -10,8 +10,9 @@ namespace DebtorsDbModel.Model
     {
         public Guid Id { get; set; }
         public User Responsible { get; set; }
+        public string ContractNumber { get; set; }
         public ushort PassportSeries { get; set; }
-        public ushort PassportNumber { get; set; }
+        public uint PassportNumber { get; set; }
         public string FullName { get; set; }
         public string RegistrationAddress { get; set; }
         public decimal StartDebt { get; set; }

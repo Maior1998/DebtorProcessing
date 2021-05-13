@@ -7,17 +7,24 @@
       mc:Ignorable="d" 
       Background="White"
       d:DesignHeight="450" d:DesignWidth="800"
+      
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=DebtorsTableViewModel}"
       Title="DebtorsTableView">
 
     <DockPanel>
         <DockPanel Dock="Bottom" Margin="10" LastChildFill="False">
-            <Button Content="Добавить" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Изменить" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Удалить" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Экспортировать" DockPanel.Dock="Left" Margin="5"/>
+            <Button Content="Добавить" DockPanel.Dock="Left" Margin="5" Command="{Binding AddDebtor}"/>
+            <Button Content="Изменить" DockPanel.Dock="Left" Margin="5" Command="{Binding EditDebtor}"/>
+            <Button Content="Удалить" DockPanel.Dock="Left" Margin="5" Command="{Binding DeleteDebtor}"/>
+            <Button Content="Экспортировать" DockPanel.Dock="Left" Margin="5" Command="{Binding ExportCurrentDebtorsCollection}"/>
         </DockPanel>
-        <DataGrid Margin="5" AutoGenerateColumns="False" ItemsSource="{Binding Debtors}">
+        <DataGrid 
+            Margin="5" 
+            ItemsSource="{Binding Debtors}"
+            SelectionUnit="FullRow"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedDebtor}"
+            >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер договора" Binding="{Binding ContractNumber}"/>
                 <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt, Mode=OneWay}"/>

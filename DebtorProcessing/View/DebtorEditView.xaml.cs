@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using DebtorProcessing.ViewModel;
+
 namespace DebtorProcessing.View
 {
     /// <summary>
@@ -20,9 +22,10 @@ namespace DebtorProcessing.View
     /// </summary>
     public partial class DebtorEditView : Page
     {
-        public DebtorEditView()
+        public DebtorEditView(Guid debtorId)
         {
             InitializeComponent();
+            ((DebtorsEditViewModel)DataContext).SetDebtor(debtorId);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using DebtorProcessing.Services;
+using DebtorProcessing.View;
 using DebtorProcessing.ViewModel;
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
@@ -43,16 +44,16 @@ namespace DebtorProcessing
             services.AddSingleton<PageService>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<LoginViewModel>();
-            services.AddSingleton<DebtorsTableViewModel>();
+            services.AddTransient<DebtorsTableViewModel>();
+            services.AddTransient<DebtorsEditViewModel>();
 
 
 
 
 
 
-
-            DbModel model = new();
-            DbModel.CreateTestData(model);
+            Context model = new();
+            Context.CreateTestData(model);
         }
     }
 }

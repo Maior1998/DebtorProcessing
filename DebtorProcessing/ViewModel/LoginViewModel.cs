@@ -36,7 +36,7 @@ namespace DebtorProcessing.ViewModel
         public DelegateCommand LoginCommand => loginCommand ??= new(() =>
         {
             string hash = User.GetHashedString(Password);
-            DbModel model = new();
+            Context model = new();
 
             User user = model.Users.SingleOrDefault(x =>
                 x.Login.ToLower() == Login.ToLower()

@@ -13,9 +13,9 @@ namespace DebtorProcessing.Misc
         public MainViewModel MainViewModel => App.Resolve<MainViewModel>();
         public LoginViewModel LoginViewModel => App.Resolve<LoginViewModel>();
         public DebtorsTableViewModel DebtorsTableViewModel => App.Resolve<DebtorsTableViewModel>();
+        public DebtorsEditViewModel DebtorsEditViewModel => App.Resolve<DebtorsEditViewModel>();
 
 
 
-        
     }
 }

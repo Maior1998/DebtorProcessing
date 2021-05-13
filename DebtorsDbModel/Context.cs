@@ -4,11 +4,22 @@ using System.Collections.Generic;
 using DebtorsDbModel.Model;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DebtorsDbModel
 {
-    public class DbModel : DbContext
+    public class Context : DbContext
     {
+        public readonly ILoggerFactory MyLoggerFactory;
+
+        public Context() :base()
+        {
+            MyLoggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddDebug();
+            });
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
@@ -62,7 +73,7 @@ namespace DebtorsDbModel
         public virtual DbSet<DebtorPayment> DebtorPayments { get; set; }
         public virtual DbSet<AccessMode> AccessModes { get; set; }
 
-        public static void CreateTestData(DbModel model)
+        public static void CreateTestData(Context model)
         {
             model.Database.EnsureDeleted();
             model.Database.EnsureCreated();

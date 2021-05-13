@@ -51,7 +51,7 @@ namespace DebtorProcessing
 
 
 
-            DbModel model = new DbModel();
+            DbModel model = new();
             DbModel.CreateTestData(model);
         }
     }

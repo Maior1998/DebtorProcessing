@@ -11,27 +11,31 @@
       d:DesignHeight="450" d:DesignWidth="800"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=LoginViewModel}"
       Title="LoginView">
-    <Grid Width="180" Height="250">
-        <Rectangle Fill="White" Opacity="0.3"/>
-        <materialDesign:Card  Background="Transparent">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="1">
+    <Grid Width="220" Height="270">
+        <Rectangle Fill="White" Opacity="1"/>
+        <GroupBox Background="Transparent">
+            <GroupBox.Header>
+                <TextBlock HorizontalAlignment="Center" Text="ВХОД" Foreground="White"/>
+            </GroupBox.Header>
+            <DockPanel Margin="5 10" Opacity="1" LastChildFill="False">
                 <TextBox 
-                    Text="{Binding Login}"
+                    Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Логин"
+                    DockPanel.Dock="Top"
                     Margin="10"/>
                 <PasswordBox 
                     PasswordChanged="PasswordBox_OnPasswordChanged"
                     materialDesign:HintAssist.Hint="Пароль"
+                    DockPanel.Dock="Top"
                     Margin="10"/>
                 <Button 
                     IsDefault="True" 
+                    DockPanel.Dock="Bottom"
                     Content="Войти" 
-                    Width="150" 
-                    Height="30" 
                     Command="{Binding LoginCommand}" 
                     Margin="10"/>
-            </StackPanel>
-        </materialDesign:Card>
+            </DockPanel>
+        </GroupBox>
     </Grid>
     
 </Page>

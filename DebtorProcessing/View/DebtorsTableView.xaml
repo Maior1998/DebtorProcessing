@@ -12,15 +12,15 @@
 
     <DockPanel>
         <DockPanel Dock="Bottom" Margin="10" LastChildFill="False">
-            <Button Content="Add" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Edit" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Remove" DockPanel.Dock="Left" Margin="5"/>
-            <Button Content="Export" DockPanel.Dock="Left" Margin="5"/>
+            <Button Content="Добавить" DockPanel.Dock="Left" Margin="5"/>
+            <Button Content="Изменить" DockPanel.Dock="Left" Margin="5"/>
+            <Button Content="Удалить" DockPanel.Dock="Left" Margin="5"/>
+            <Button Content="Экспортировать" DockPanel.Dock="Left" Margin="5"/>
         </DockPanel>
         <DataGrid Margin="5" AutoGenerateColumns="False" ItemsSource="{Binding Debtors}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер договора" Binding="{Binding ContractNumber}"/>
-                <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt}"/>
+                <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt, Mode=OneWay}"/>
                 <DataGridTextColumn Header="Серия паспорта" Binding="{Binding PassportSeries}"/>
                 <DataGridTextColumn Header="Номер паспорта" Binding="{Binding PassportNumber}"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>

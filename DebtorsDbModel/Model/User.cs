@@ -36,5 +36,8 @@ namespace DebtorsDbModel.Model
             return Sb.ToString();
         }
 
+
+        public ICollection<UserRole> UserRoles { get; set; }
+
     }
 }

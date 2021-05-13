@@ -16,7 +16,7 @@ namespace DebtorsDbModel.Model
         public string FullName { get; set; }
         public string RegistrationAddress { get; set; }
         public decimal StartDebt { get; set; }
-        public List<DebtorPayment> Payments { get; set; } = new();
+        public ICollection<DebtorPayment> Payments { get; set; } = new List<DebtorPayment>();
         public decimal CurrentDebt => StartDebt - Payments.Sum(x => x.Amount);
     }
 }

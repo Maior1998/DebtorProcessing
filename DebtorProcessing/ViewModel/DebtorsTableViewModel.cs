@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+using DebtorProcessing.Model;
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
 
@@ -13,6 +14,8 @@ using DebtorsDbModel;
 using DebtorsDbModel.Model;
 
 using DevExpress.Mvvm;
+
+using Microsoft.EntityFrameworkCore;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -33,14 +36,23 @@ namespace DebtorProcessing.ViewModel
         public void UpdateDebtors()
         {
             Context model = new();
-            Debtors = model.Debtors.ToArray();
+            if (string.IsNullOrWhiteSpace(SearchText))
+                Debtors = model.Debtors
+                    .Include(x => x.Responsible).ToArray();
+            else
+                Debtors = model.Debtors
+                    .Include(x => x.Responsible)
+                    .Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower())).ToArray();
         }
 
         private DelegateCommand addDebtor;
         public DelegateCommand AddDebtor => addDebtor ??= new(() =>
         {
             Context context = new();
-            Debtor addingDebtor = new() { FullName = "Новый должник" };
+            Debtor addingDebtor = DatabaseHelperFunctions.GetExampleDebtor();
+            User currentLoggedInUser = context.Users.Single(x => x.Id == session.CurrentLoggedInUser.Id);
+            currentLoggedInUser.Debtors.Add(addingDebtor);
+
             context.Debtors.Add(addingDebtor);
             context.SaveChanges();
             UpdateDebtors();
@@ -75,10 +87,13 @@ namespace DebtorProcessing.ViewModel
             exportCurrentDebtorsCollection ??= new(() =>
             {
 
-            });
+            }, () => Debtors != null && Debtors.Any());
 
         [Reactive] public Debtor[] Debtors { get; set; } = new Debtor[0];
         [Reactive] public Debtor SelectedDebtor { get; set; }
+        [Reactive] public string SearchText { get; set; }
 
+        private DelegateCommand search;
+        public DelegateCommand Search => search ??= new(UpdateDebtors);
     }
 }

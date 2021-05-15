@@ -11,7 +11,7 @@ namespace DebtorsDbModel.Model
     public class User
     {
         public Guid Id { get; set; }
-
+        public string FullName { get; set; }
         public string Login { get; set; }
 
         public string PasswordHash { get; set; }
@@ -36,8 +36,8 @@ namespace DebtorsDbModel.Model
             return Sb.ToString();
         }
 
-
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<Debtor> Debtors { get; set; } = new List<Debtor>();
+        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     }
 }

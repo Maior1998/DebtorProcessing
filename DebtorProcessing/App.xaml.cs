@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Markup;
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
 using DebtorProcessing.ViewModel;
@@ -28,6 +30,12 @@ namespace DebtorProcessing
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            CultureInfo.DefaultThreadCurrentCulture = new("ru-RU");
+            Thread.CurrentThread.CurrentCulture = new("ru-RU");
+            Thread.CurrentThread.CurrentUICulture = new("ru-RU");
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
 
             ServiceCollection serviceCollection = new();
             ConfigureServices(serviceCollection);

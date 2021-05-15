@@ -18,21 +18,27 @@
             <Button Content="Удалить" DockPanel.Dock="Left" Margin="5" Command="{Binding DeleteDebtor}"/>
             <Button Content="Экспортировать" DockPanel.Dock="Left" Margin="5" Command="{Binding ExportCurrentDebtorsCollection}"/>
         </DockPanel>
+        <DockPanel Dock="Top" Margin="5">
+            <TextBlock Text="Введите номер КД для поиска" VerticalAlignment="Center"/>
+            <Button DockPanel.Dock="Right" Margin="5" Content="Поиск" Command="{Binding Search}"/>
+            <TextBox Margin="10" Text="{Binding SearchText}"/>
+        </DockPanel>
         <DataGrid 
             Margin="5" 
             ItemsSource="{Binding Debtors}"
             SelectionUnit="FullRow"
             SelectionMode="Single"
+            MouseDoubleClick="Control_OnMouseDoubleClick"
             SelectedItem="{Binding SelectedDebtor}"
             >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер договора" Binding="{Binding ContractNumber}"/>
-                <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt, Mode=OneWay, StringFormat='{}{0:C1}'}"/>
                 <DataGridTextColumn Header="Серия паспорта" Binding="{Binding PassportSeries}"/>
                 <DataGridTextColumn Header="Номер паспорта" Binding="{Binding PassportNumber}"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>
-                <DataGridTextColumn Header="Ответственный" Binding="{Binding Responsible}"/>
-                <DataGridTextColumn Header="Первоначальный долг" Binding="{Binding StartDebt}"/>
+                <DataGridTextColumn Header="Ответственный" Binding="{Binding Responsible.FullName}"/>
+                <DataGridTextColumn Header="Первоначальный долг" Binding="{Binding StartDebt, StringFormat='{}{0:C1}'}"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

@@ -12,7 +12,7 @@ namespace DebtorsDbModel
     {
         public readonly ILoggerFactory MyLoggerFactory;
 
-        public Context() :base()
+        public Context() : base()
         {
             MyLoggerFactory = LoggerFactory.Create(builder =>
             {
@@ -66,6 +66,10 @@ namespace DebtorsDbModel
             modelBuilder.Entity<RoleObjectAccess>()
                 .HasIndex(x => new { x.GrantedAccessModeId, x.ObjectId, x.UserRoleId })
                 .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Debtors)
+                .WithOne(x => x.Responsible);
         }
 
         public virtual DbSet<User> Users { get; set; }
@@ -81,6 +85,7 @@ namespace DebtorsDbModel
             {
                 Login = "admin",
                 PasswordHash = User.GetHashedString("admin"),
+                FullName = "Администратор",
                 UserRoles = new List<UserRole>()
                 {
                     new UserRole(){Name = "Role 1", RoleObjectAccesses = new List<RoleObjectAccess>()

@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using DebtorProcessing.ViewModel;
+
 namespace DebtorProcessing.View
 {
     /// <summary>
@@ -23,6 +25,14 @@ namespace DebtorProcessing.View
         public DebtorsTableView()
         {
             InitializeComponent();
+            viewModel = (DebtorsTableViewModel)DataContext;
+        }
+
+        private readonly DebtorsTableViewModel viewModel;
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (viewModel.EditDebtor.CanExecute(null))
+                viewModel.EditDebtor.Execute(null);
         }
     }
 }

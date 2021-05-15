@@ -33,10 +33,58 @@
                 />
         </DockPanel>
         <ScrollViewer>
-            <DockPanel LastChildFill="False">
-                <TextBox 
+            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                <DockPanel LastChildFill="False" VerticalAlignment="Center" Width="350" Margin="10">
+                    <DockPanel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="Margin" Value="0 15"></Setter>
+                        </Style>
+                    </DockPanel.Resources>
+                    
+                    <TextBox 
                     Text="{Binding Debtor.FullName}"
+                    materialDesign:HintAssist.Hint="ФИО"
+                    materialDesign:HintAssist.HelperText="ФИО"
                     DockPanel.Dock="Top"/>
+                    
+                    <TextBox 
+                    Text="{Binding Debtor.ContractNumber}"
+                    materialDesign:HintAssist.Hint="Номер договора"
+                    materialDesign:HintAssist.HelperText="Номер договора"
+                    DockPanel.Dock="Top"/>
+                    
+                    <TextBox 
+                    Text="{Binding Debtor.StartDebt}"
+                    materialDesign:HintAssist.Hint="Первоначальный долг"
+                    materialDesign:HintAssist.HelperText="Первоначальный долг"
+                    DockPanel.Dock="Top"/>
+                    
+                    <TextBox 
+                    Text="{Binding Debtor.PassportSeries}"
+                    materialDesign:HintAssist.Hint="Серия паспорта"
+                    materialDesign:HintAssist.HelperText="Серия паспорта"
+                    DockPanel.Dock="Top"/>
+                    
+                    <TextBox 
+                    Text="{Binding Debtor.PassportNumber}"
+                    materialDesign:HintAssist.Hint="Номер паспорта"
+                    materialDesign:HintAssist.HelperText="Номер паспорта"
+                    DockPanel.Dock="Top"/>
+                    
+                    <TextBox 
+                    Text="{Binding Debtor.RegistrationAddress}"
+                    materialDesign:HintAssist.Hint="Адрес регистрации"
+                    materialDesign:HintAssist.HelperText="Адрес регистрации"
+                    DockPanel.Dock="Top"/>
+                </DockPanel>
+                <GroupBox Header="Платежи должника" Width="300" Margin="10" DockPanel.Dock="Right">
+                    <DataGrid ItemsSource="{Binding Debtor.Payments}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата платежа"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Сумма"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
             </DockPanel>
         </ScrollViewer>
     </DockPanel>

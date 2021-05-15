@@ -47,7 +47,7 @@ namespace DebtorProcessing.ViewModel
                 return;
             }
             sessionService.CurrentLoggedInUser = user;
-            pageService.NavigateCommand.Execute(new DebtorsTableView());
+            pageService.NavigateCommand.Execute(new TabsView());
         }, () => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password));
     }
 }

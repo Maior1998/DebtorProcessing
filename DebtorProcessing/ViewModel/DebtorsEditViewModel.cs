@@ -49,7 +49,7 @@ namespace DebtorProcessing.ViewModel
 
         private void GoBack()
         {
-            PageService.NavigateWithoutHistoryCommand.Execute(new DebtorsTableView());
+            PageService.BackCommand.Execute(null);
         }
 
         public DelegateCommand Save => save ??= new(() =>

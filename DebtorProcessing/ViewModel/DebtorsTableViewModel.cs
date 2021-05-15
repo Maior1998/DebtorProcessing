@@ -42,10 +42,13 @@ namespace DebtorProcessing.ViewModel
             Context model = new();
             if (string.IsNullOrWhiteSpace(SearchText))
                 Debtors = model.Debtors
-                    .Include(x => x.Responsible).ToArray();
+                    .Include(x => x.Responsible)
+                    .Include(x => x.Payments)
+                    .ToArray();
             else
                 Debtors = model.Debtors
                     .Include(x => x.Responsible)
+                    .Include(x => x.Payments)
                     .Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower())).ToArray();
         }
 
@@ -67,7 +70,7 @@ namespace DebtorProcessing.ViewModel
         private DelegateCommand editDebtor;
         public DelegateCommand EditDebtor => editDebtor ??= new(() =>
         {
-            pageService.NavigateWithoutHistoryCommand.Execute(new DebtorEditView(SelectedDebtor.Id));
+            pageService.NavigateCommand.Execute(new DebtorEditView(SelectedDebtor.Id));
         }, () => SelectedDebtor != null);
 
         private DelegateCommand deleteDebtor;

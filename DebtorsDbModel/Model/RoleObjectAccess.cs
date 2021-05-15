@@ -22,10 +22,6 @@ namespace DebtorsDbModel.Model
         public Guid ObjectId { get; set; }
         public SecurityObject Object { get; set; }
 
-        public Guid GrantedAccessModeId { get; set; }
-
-        public AccessMode GrantedAccessMode { get; set; }
-
     }
 
 

@@ -17,7 +17,11 @@ namespace DebtorProcessing.Misc
         public DebtorsTableViewModel DebtorsTableViewModel => App.Resolve<DebtorsTableViewModel>();
         public DebtorsEditViewModel DebtorsEditViewModel => App.Resolve<DebtorsEditViewModel>();
         public PaymentEditWindowViewModel PaymentEditWindowViewModel => App.Resolve<PaymentEditWindowViewModel>();
+        public TabsViewModel TabsViewModel => App.Resolve<TabsViewModel>();
+        public AdminPanelViewModel AdminPanelViewModel => App.Resolve<AdminPanelViewModel>();
 
-
+        public AdminPanelUsersManagementViewModel AdminPanelUsersManagementViewModel =>
+            App.Resolve<AdminPanelUsersManagementViewModel>();
+        public AdminPanelRolesManagementViewModel AdminPanelRolesManagementViewModel => App.Resolve<AdminPanelRolesManagementViewModel>();
     }
 }

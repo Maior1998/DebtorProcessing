@@ -8,11 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
+
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
 using DebtorProcessing.ViewModel;
+
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using OfficeOpenXml;
@@ -54,8 +57,10 @@ namespace DebtorProcessing
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<DebtorsTableViewModel>();
             services.AddTransient<DebtorsEditViewModel>();
-
-
+            services.AddSingleton<TabsViewModel>();
+            services.AddSingleton<AdminPanelViewModel>();
+            services.AddSingleton<AdminPanelUsersManagementViewModel>();
+            services.AddSingleton<AdminPanelRolesManagementViewModel>();
 
             services.AddTransient<PaymentEditWindowViewModel>();
 

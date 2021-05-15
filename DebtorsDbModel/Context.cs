@@ -46,12 +46,6 @@ namespace DebtorsDbModel
                 .WithOne(x => x.Debtor);
 
             modelBuilder.Entity<RoleObjectAccess>()
-                .HasOne(x => x.GrantedAccessMode)
-                .WithMany(x => x.RoleObjectAccesses)
-                .HasForeignKey(x => x.GrantedAccessModeId)
-                .IsRequired();
-
-            modelBuilder.Entity<RoleObjectAccess>()
                 .HasOne(x => x.Object)
                 .WithMany(x => x.RoleObjectAccesses)
                 .HasForeignKey(x => x.ObjectId)
@@ -64,7 +58,7 @@ namespace DebtorsDbModel
                 .IsRequired();
 
             modelBuilder.Entity<RoleObjectAccess>()
-                .HasIndex(x => new { x.GrantedAccessModeId, x.ObjectId, x.UserRoleId })
+                .HasIndex(x => new { x.ObjectId, x.UserRoleId })
                 .IsUnique();
 
             modelBuilder.Entity<User>()
@@ -75,7 +69,6 @@ namespace DebtorsDbModel
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Debtor> Debtors { get; set; }
         public virtual DbSet<DebtorPayment> DebtorPayments { get; set; }
-        public virtual DbSet<AccessMode> AccessModes { get; set; }
         public virtual DbSet<RoleObjectAccess> RoleObjectAccesses { get; set; }
         public virtual DbSet<SecurityObject> SecurityObjects { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
@@ -95,6 +88,20 @@ namespace DebtorsDbModel
                     {
 
                     }
+                    }
+                }
+            });
+            model.Users.Add(new User()
+            {
+                Login = "user",
+                PasswordHash = User.GetHashedString("user"),
+                FullName = "Пользователь",
+                UserRoles = new List<UserRole>()
+                {
+                    new UserRole(){Name = "Role 1", RoleObjectAccesses = new List<RoleObjectAccess>()
+                        {
+
+                        }
                     }
                 }
             });

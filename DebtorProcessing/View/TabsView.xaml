@@ -1,0 +1,31 @@
+﻿<Page x:Class="DebtorProcessing.View.TabsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DebtorProcessing.View"
+      mc:Ignorable="d" 
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=TabsViewModel}"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="White"
+      Title="TabsView">
+    <DockPanel>
+        <TabControl>
+            <TabItem Header="Список должников">
+                <Frame>
+                    <Frame.Content>
+                        <local:DebtorsTableView/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
+            <TabItem Header="Настройки"></TabItem>
+            <TabItem Header="Администрирование">
+                <Frame>
+                    <Frame.Content>
+                        <local:AdminPanelView/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Page>

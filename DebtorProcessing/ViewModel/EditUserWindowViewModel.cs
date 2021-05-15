@@ -11,18 +11,17 @@ using ReactiveUI.Fody.Helpers;
 
 namespace DebtorProcessing.ViewModel
 {
-    public class PaymentEditWindowViewModel : ReactiveObject
+    public class EditUserWindowViewModel : ReactiveObject
     {
-        [Reactive] public DateTime PaymentDate { get; set; }
-        [Reactive] public decimal PaymentAmount { get; set; }
+        [Reactive] public string FullName { get; set; }
+        [Reactive] public string Login { get; set; }
 
         public event Action OnSaved;
 
         private DelegateCommand saveCommand;
-
         public DelegateCommand SaveCommand => saveCommand ??= new(() =>
         {
             OnSaved?.Invoke();
-        });
+        }, () => !string.IsNullOrWhiteSpace(FullName) && !string.IsNullOrWhiteSpace(Login));
     }
 }

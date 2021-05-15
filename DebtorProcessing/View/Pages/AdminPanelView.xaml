@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DebtorProcessing.View"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:pages="clr-namespace:DebtorProcessing.View.Pages"
       mc:Ignorable="d" 
       Background="White"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=AdminPanelViewModel}"
@@ -22,7 +23,7 @@
         <TabItem Header="Роли">
             <Frame NavigationUIVisibility="Hidden">
                 <Frame.Content>
-                    <local:AdminPanelRolesManagementView/>
+                    <pages:AdminPanelRolesManagementView/>
                 </Frame.Content>
             </Frame>
         </TabItem>

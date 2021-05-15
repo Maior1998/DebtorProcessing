@@ -96,14 +96,6 @@ namespace DebtorsDbModel
                 Login = "user",
                 PasswordHash = User.GetHashedString("user"),
                 FullName = "Пользователь",
-                UserRoles = new List<UserRole>()
-                {
-                    new UserRole(){Name = "Role 1", RoleObjectAccesses = new List<RoleObjectAccess>()
-                        {
-
-                        }
-                    }
-                }
             });
             model.SaveChanges();
 
@@ -119,6 +111,55 @@ namespace DebtorsDbModel
                 {
                     new DebtorPayment() {Amount = 123, Date = DateTime.Today}
                 },
+            });
+
+            model.UserRoles.Add(new UserRole()
+            {
+                Name = "Role 2",
+                RoleObjectAccesses =new List<RoleObjectAccess>()
+                {
+                    new RoleObjectAccess()
+                    {
+                        Object = new()
+                        {
+                            Name = "Object 1"
+                        }
+                    }
+
+                }
+            });
+            model.UserRoles.Add(new UserRole()
+            {
+                Name = "Role 3",
+                RoleObjectAccesses = new List<RoleObjectAccess>()
+                {
+                    new RoleObjectAccess()
+                    {
+                        Object = new()
+                        {
+                            Name = "Object 2"
+                        }
+                    }
+
+                }
+
+            });
+            model.UserRoles.Add(new UserRole() { Name = "Role 4" });
+            model.UserRoles.Add(new UserRole()
+            {
+                Name = "Role 5",
+                RoleObjectAccesses = new List<RoleObjectAccess>()
+                {
+                    new RoleObjectAccess()
+                    {
+                        Object = new()
+                        {
+                            Name = "Object 3"
+                        }
+                    }
+
+                }
+
             });
 
             model.SaveChanges();

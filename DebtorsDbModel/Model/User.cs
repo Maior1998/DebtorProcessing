@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,8 +13,9 @@ namespace DebtorsDbModel.Model
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }
+        [Required]
         public string Login { get; set; }
-
+        [Required]
         public string PasswordHash { get; set; }
 
         private const string Salt = "X#c=ZkgR/aS4_HZ(HfEH(6.nqyd=Q-qkxbn!ffR=V=xiD8aq#4";
@@ -25,6 +27,7 @@ namespace DebtorsDbModel.Model
 
         public static string GetHashedString(string value)
         {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
             value = GetSaltedString(value);
             StringBuilder Sb = new();
 

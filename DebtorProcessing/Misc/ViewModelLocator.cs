@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using DebtorProcessing.ViewModel;
+
 using ReactiveUI;
 
 namespace DebtorProcessing.Misc
@@ -14,7 +16,7 @@ namespace DebtorProcessing.Misc
         public LoginViewModel LoginViewModel => App.Resolve<LoginViewModel>();
         public DebtorsTableViewModel DebtorsTableViewModel => App.Resolve<DebtorsTableViewModel>();
         public DebtorsEditViewModel DebtorsEditViewModel => App.Resolve<DebtorsEditViewModel>();
-
+        public PaymentEditWindowViewModel PaymentEditWindowViewModel => App.Resolve<PaymentEditWindowViewModel>();
 
 
     }

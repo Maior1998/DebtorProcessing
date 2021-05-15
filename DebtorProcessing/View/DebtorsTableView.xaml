@@ -31,6 +31,12 @@
             MouseDoubleClick="Control_OnMouseDoubleClick"
             SelectedItem="{Binding SelectedDebtor}"
             >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Изменить" Command="{Binding EditDebtor}"/>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteDebtor}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер договора" Binding="{Binding ContractNumber}"/>
                 <DataGridTextColumn Header="Текущий долг" Binding="{Binding CurrentDebt, Mode=OneWay, StringFormat='{}{0:C1}'}"/>

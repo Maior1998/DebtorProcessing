@@ -12,18 +12,17 @@
       Title="DebtorEditView">
 
     <DockPanel>
-        <DockPanel Dock="Top" LastChildFill="False" Background="WhiteSmoke">
+        <DockPanel Dock="Top" LastChildFill="False" Background="LightGray">
             <Button 
                 Style="{StaticResource MaterialDesignFlatButton}"
                 Command="{Binding BackCommand}"
                 DockPanel.Dock="Left" 
-                Padding="0"
+                Foreground="Red"
+                Content="Отмена"
                 Margin="5">
-                <Button.Content>
-                    <materialDesign:PackIcon Kind="ArrowLeft" Width="30" Height="30"/>
-                </Button.Content>
             </Button>
             <Button 
+
                 Content="Сохранить" 
                 DockPanel.Dock="Right" 
                 Margin="5"
@@ -40,37 +39,37 @@
                             <Setter Property="Margin" Value="0 15"></Setter>
                         </Style>
                     </DockPanel.Resources>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.FullName}"
                     materialDesign:HintAssist.Hint="ФИО"
                     materialDesign:HintAssist.HelperText="ФИО"
                     DockPanel.Dock="Top"/>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.ContractNumber}"
                     materialDesign:HintAssist.Hint="Номер договора"
                     materialDesign:HintAssist.HelperText="Номер договора"
                     DockPanel.Dock="Top"/>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.StartDebt}"
                     materialDesign:HintAssist.Hint="Первоначальный долг"
                     materialDesign:HintAssist.HelperText="Первоначальный долг"
                     DockPanel.Dock="Top"/>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.PassportSeries}"
                     materialDesign:HintAssist.Hint="Серия паспорта"
                     materialDesign:HintAssist.HelperText="Серия паспорта"
                     DockPanel.Dock="Top"/>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.PassportNumber}"
                     materialDesign:HintAssist.Hint="Номер паспорта"
                     materialDesign:HintAssist.HelperText="Номер паспорта"
                     DockPanel.Dock="Top"/>
-                    
+
                     <TextBox 
                     Text="{Binding Debtor.RegistrationAddress}"
                     materialDesign:HintAssist.Hint="Адрес регистрации"
@@ -78,12 +77,58 @@
                     DockPanel.Dock="Top"/>
                 </DockPanel>
                 <GroupBox Header="Платежи должника" Width="300" Margin="10" DockPanel.Dock="Right">
-                    <DataGrid ItemsSource="{Binding Debtor.Payments}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Дата платежа"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Сумма"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <DockPanel>
+                        <DockPanel
+                            Dock="Bottom" 
+                            LastChildFill="False"
+                            HorizontalAlignment="Center"
+                            Margin="5">
+                            <DockPanel.Resources>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                    <Style.Setters>
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Width" Value="30"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Margin" Value="2 0"></Setter>
+                                    </Style.Setters>
+                                </Style>
+                            </DockPanel.Resources>
+                            <Button 
+                                Command="{Binding AddPayment}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="PlusThick" Width="30" Height="30"/>
+                                </Button.Content>
+                            </Button>
+                            <Button
+                                Command="{Binding EditPayment}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="PencilOutline" Width="30" Height="30"/>
+                                </Button.Content>
+                            </Button>
+                            <Button
+                                Command="{Binding DeletePayment}">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="DeleteOutline" Width="30" Height="30"/>
+                                </Button.Content>
+                            </Button>
+                        </DockPanel>
+                        <DataGrid 
+                            x:Name="dgPayments"
+                            ItemsSource="{Binding Debtor.Payments}"
+                            SelectedItem="{Binding SelectedPayment}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Дата платежа" Binding="{Binding Date}"/>
+                                <DataGridTextColumn Header="Сумма" Binding="{Binding Amount}"/>
+                            </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить" Command="{Binding AddPayment}"/>
+                                    <MenuItem Header="Изменить" Command="{Binding EditPayment}"/>
+                                    <MenuItem Header="Удалить" Command="{Binding DeletePayment}"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </DockPanel>
                 </GroupBox>
             </DockPanel>
         </ScrollViewer>

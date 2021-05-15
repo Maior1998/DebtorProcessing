@@ -25,7 +25,16 @@ namespace DebtorProcessing.View
         public DebtorEditView(Guid debtorId)
         {
             InitializeComponent();
-            ((DebtorsEditViewModel)DataContext).SetDebtor(debtorId);
+            viewModel = (DebtorsEditViewModel)DataContext;
+            viewModel.OnPaymentsChanged += ViewModel_OnPaymentsChanged;
+            viewModel.SetDebtor(debtorId);
         }
+
+        private void ViewModel_OnPaymentsChanged()
+        {
+            CollectionViewSource.GetDefaultView(dgPayments.ItemsSource).Refresh();
+        }
+
+        private DebtorsEditViewModel viewModel;
     }
 }

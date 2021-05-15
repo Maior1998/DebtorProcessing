@@ -57,7 +57,7 @@ namespace DebtorProcessing
 
 
 
-
+            services.AddTransient<PaymentEditWindowViewModel>();
 
 
             Context model = new();

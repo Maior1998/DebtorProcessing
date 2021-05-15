@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DebtorsDbModel.Model
 {
     /// <summary>
-    /// Представляет собой запись о том, что указанная роль имеет указанное правл на указанный объект.
+    /// Представляет собой запись о том, что указанная роль имеет указанное право на указанный объект.
     /// </summary>
     public class RoleObjectAccess
     {
@@ -29,10 +29,5 @@ namespace DebtorsDbModel.Model
     }
 
 
-    public class AccessMode
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<RoleObjectAccess> RoleObjectAccesses { get; set; } = new List<RoleObjectAccess>();
-    }
+    
 }

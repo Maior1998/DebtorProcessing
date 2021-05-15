@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ using DebtorsDbModel.Model;
 using DevExpress.Mvvm;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+
+using OfficeOpenXml;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -86,7 +90,34 @@ namespace DebtorProcessing.ViewModel
         public DelegateCommand ExportCurrentDebtorsCollection =>
             exportCurrentDebtorsCollection ??= new(() =>
             {
+                SaveFileDialog saveFileDialog = new()
+                {
+                    AddExtension = true,
+                    CheckPathExists = true,
+                    FileName = $"Экспорт должников от {DateTime.Now:dd MM yyyy HH mm ss}",
+                    DefaultExt = "*.xlsx"
+                };
+                if (!saveFileDialog.ShowDialog().Value) return;
+                string saveFileName = saveFileDialog.FileName;
+                ExcelPackage excel = new();
+                ExcelWorksheet sheet = excel.Workbook.Worksheets.Add("Выгрузка");
 
+                sheet.Cells[1, 1].Value = "Номер КД";
+                sheet.Cells[1, 2].Value = "ФИО";
+                sheet.Cells[1, 3].Value = "Адрес регистрации";
+                sheet.Cells[1, 4].Value = "Начальный долг";
+                sheet.Cells[1, 5].Value = "Текущий долг";
+
+                for (int i = 0; i < Debtors.Length; i++)
+                {
+                    sheet.Cells[i + 2, 1].Value = Debtors[i].ContractNumber;
+                    sheet.Cells[i + 2, 2].Value = Debtors[i].FullName;
+                    sheet.Cells[i + 2, 3].Value = Debtors[i].RegistrationAddress;
+                    sheet.Cells[i + 2, 4].Value = Debtors[i].StartDebt;
+                    sheet.Cells[i + 2, 5].Value = Debtors[i].CurrentDebt;
+                }
+
+                excel.SaveAs(new FileInfo(saveFileName));
             }, () => Debtors != null && Debtors.Any());
 
         [Reactive] public Debtor[] Debtors { get; set; } = new Debtor[0];

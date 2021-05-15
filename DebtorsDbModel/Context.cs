@@ -76,6 +76,9 @@ namespace DebtorsDbModel
         public virtual DbSet<Debtor> Debtors { get; set; }
         public virtual DbSet<DebtorPayment> DebtorPayments { get; set; }
         public virtual DbSet<AccessMode> AccessModes { get; set; }
+        public virtual DbSet<RoleObjectAccess> RoleObjectAccesses { get; set; }
+        public virtual DbSet<SecurityObject> SecurityObjects { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
 
         public static void CreateTestData(Context model)
         {
@@ -112,6 +115,9 @@ namespace DebtorsDbModel
             });
 
             model.SaveChanges();
+
+
+
         }
 
     }

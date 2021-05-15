@@ -10,8 +10,8 @@ namespace DebtorsDbModel.Model
     public class DebtorPayment
     {
         public Guid Id { get; set; }
-        public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
+        public decimal Amount { get; set; } = 0;
+        public DateTime Date { get; set; } = DateTime.Now;
         [Required] public Debtor Debtor { get; set; }
     }
 }

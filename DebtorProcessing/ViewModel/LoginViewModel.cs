@@ -13,6 +13,8 @@ using DebtorsDbModel.Model;
 
 using DevExpress.Mvvm;
 
+using Microsoft.EntityFrameworkCore;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -38,7 +40,11 @@ namespace DebtorProcessing.ViewModel
             string hash = User.GetHashedString(Password);
             Context model = new();
 
-            User user = model.Users.SingleOrDefault(x =>
+            User user = model.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.RoleObjectAccesses)
+                .ThenInclude(x => x.Object)
+                .SingleOrDefault(x =>
                 x.Login.ToLower() == Login.ToLower()
                 && x.PasswordHash.ToLower() == hash.ToLower());
             if (user == null)

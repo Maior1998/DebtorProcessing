@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DebtorProcessing.View"
+      xmlns:pages="clr-namespace:DebtorProcessing.View.Pages"
       mc:Ignorable="d" 
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=TabsViewModel}"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -18,8 +19,14 @@
                     </Frame.Content>
                 </Frame>
             </TabItem>
-            <TabItem Header="Настройки"></TabItem>
-            <TabItem Header="Администрирование">
+            <TabItem Header="Настройки">
+                <Frame NavigationUIVisibility="Hidden">
+                    <Frame.Content>
+                        <pages:SettingsView/>
+                    </Frame.Content>
+                </Frame>
+            </TabItem>
+            <TabItem Header="Администрирование" Visibility="{Binding Session.HasAccessToAdminPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Frame>
                     <Frame.Content>
                         <local:AdminPanelView/>

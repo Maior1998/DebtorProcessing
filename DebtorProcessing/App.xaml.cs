@@ -61,11 +61,13 @@ namespace DebtorProcessing
             services.AddSingleton<AdminPanelViewModel>();
             services.AddSingleton<AdminPanelUsersManagementViewModel>();
             services.AddSingleton<AdminPanelRolesManagementViewModel>();
+            services.AddSingleton<SettingsViewModel>();
             services.AddTransient<EditRoleWindowViewModel>();
             services.AddTransient<PaymentEditWindowViewModel>();
             services.AddTransient<EditUserWindowViewModel>();
             services.AddTransient<ChooseUserRoleWindowViewModel>();
             services.AddTransient<ChooseRoleObjectAccessWindowViewModel>();
+            services.AddTransient<ChangePasswordWindowViewModel>();
             Context model = new();
             Context.CreateTestData(model);
         }

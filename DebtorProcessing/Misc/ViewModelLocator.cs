@@ -27,5 +27,9 @@ namespace DebtorProcessing.Misc
         public AdminPanelUsersManagementViewModel AdminPanelUsersManagementViewModel =>
             App.Resolve<AdminPanelUsersManagementViewModel>();
         public AdminPanelRolesManagementViewModel AdminPanelRolesManagementViewModel => App.Resolve<AdminPanelRolesManagementViewModel>();
+        public SettingsViewModel SettingsViewModel => App.Resolve<SettingsViewModel>();
+
+        public ChangePasswordWindowViewModel ChangePasswordWindowViewModel =>
+            App.Resolve<ChangePasswordWindowViewModel>();
     }
 }

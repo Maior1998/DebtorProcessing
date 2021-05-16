@@ -24,10 +24,11 @@ namespace DebtorProcessing.ViewModel
     {
 
         public PageService PageService { get; set; }
-
-        public DebtorsEditViewModel(PageService pageService)
+        public SessionService session;
+        public DebtorsEditViewModel(PageService pageService, SessionService session)
         {
             PageService = pageService;
+            this.session = session;
         }
         public void SetDebtor(Guid id)
         {
@@ -56,7 +57,7 @@ namespace DebtorProcessing.ViewModel
         {
             trackingContext.SaveChanges();
             GoBack();
-        });
+        }, () => session.CanEditNotOwnedDebtorsData || (Debtor.Responsible != null && Debtor.Responsible.Id == session.CurrentLoggedInUser.Id));
 
         private DelegateCommand addPayment;
         public DelegateCommand AddPayment => addPayment ??= new(() =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using DebtorsDbModel.Model;
 
@@ -116,54 +117,43 @@ namespace DebtorsDbModel
             model.UserRoles.Add(new UserRole()
             {
                 Name = "Role 2",
-                RoleObjectAccesses =new List<RoleObjectAccess>()
-                {
-                    new RoleObjectAccess()
-                    {
-                        Object = new()
-                        {
-                            Name = "Object 1"
-                        }
-                    }
-
-                }
             });
             model.UserRoles.Add(new UserRole()
             {
                 Name = "Role 3",
-                RoleObjectAccesses = new List<RoleObjectAccess>()
-                {
-                    new RoleObjectAccess()
-                    {
-                        Object = new()
-                        {
-                            Name = "Object 2"
-                        }
-                    }
-
-                }
 
             });
-            model.UserRoles.Add(new UserRole() { Name = "Role 4" });
+            model.UserRoles.Add(new UserRole()
+            {
+                Name = "Role 4"
+            });
             model.UserRoles.Add(new UserRole()
             {
                 Name = "Role 5",
-                RoleObjectAccesses = new List<RoleObjectAccess>()
-                {
-                    new RoleObjectAccess()
-                    {
-                        Object = new()
-                        {
-                            Name = "Object 3"
-                        }
-                    }
-
-                }
 
             });
 
+            model.SecurityObjects.AddRange(SecurityObject.ObjectNameToIdTranslator.Select(x => new SecurityObject() { Id = x.Value, Name = x.Key }));
             model.SaveChanges();
+            UserRole role = model.UserRoles
+                .Include(x=>x.RoleObjectAccesses)
+                .OrderBy(x=>x.Name).Last();
+            User user = model.Users.Single(x => x.Login == "admin");
+            role.RoleObjectAccesses.Clear();
+            model.SaveChanges();
+            SecurityObject[] objects = model.SecurityObjects.ToArray();
+            for (int i = 0; i < objects.Length; i++)
+            {
+                role.RoleObjectAccesses.Add(new()
+                {
+                    Object = objects[i]
+                });
+            }
 
+            model.SaveChanges();
+            user.UserRoles.Add(role);
+            model.SaveChanges();
+            Console.WriteLine();
 
 
         }

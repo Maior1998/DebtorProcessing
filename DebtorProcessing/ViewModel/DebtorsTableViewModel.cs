@@ -37,19 +37,29 @@ namespace DebtorProcessing.ViewModel
             UpdateDebtors();
         }
 
+        private IQueryable<Debtor> SetUserFilter(IQueryable<Debtor> source)
+        {
+            if (!session.CanViewNotOwnedDebtors)
+                return source.Where(x => x.Responsible.Id == session.CurrentLoggedInUser.Id);
+            else
+                return source;
+        }
+
+        private IQueryable<Debtor> SetSearchFilter(IQueryable<Debtor> source)
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+                return source;
+            else
+                return source.Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower()));
+        }
+
         public void UpdateDebtors()
         {
             Context model = new();
-            if (string.IsNullOrWhiteSpace(SearchText))
-                Debtors = model.Debtors
+            Debtors = SetSearchFilter(SetUserFilter(model.Debtors))
                     .Include(x => x.Responsible)
                     .Include(x => x.Payments)
                     .ToArray();
-            else
-                Debtors = model.Debtors
-                    .Include(x => x.Responsible)
-                    .Include(x => x.Payments)
-                    .Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower())).ToArray();
         }
 
         private DelegateCommand addDebtor;
@@ -65,7 +75,7 @@ namespace DebtorProcessing.ViewModel
             UpdateDebtors();
             SelectedDebtor = Debtors.Single(x => x.Id == addingDebtor.Id);
             EditDebtor.Execute(null);
-        });
+        }, () => session.CanEditDebtorsTable);
 
         private DelegateCommand editDebtor;
         public DelegateCommand EditDebtor => editDebtor ??= new(() =>
@@ -86,7 +96,7 @@ namespace DebtorProcessing.ViewModel
                 db.SaveChanges();
                 UpdateDebtors();
             }
-        }, () => SelectedDebtor != null);
+        }, () => SelectedDebtor != null && session.CanEditDebtorsTable);
 
         private DelegateCommand exportCurrentDebtorsCollection;
 

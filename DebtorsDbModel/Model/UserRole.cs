@@ -28,8 +28,9 @@ namespace DebtorsDbModel.Model
         public ICollection<User> Users { get; set; }
 
         /// <summary>
-        /// Список объектов, к которым имеет доступ данная роль.
+        /// Объекты, к которым имеет доступ данная роль.
         /// </summary>
-        public ICollection<RoleObjectAccess> RoleObjectAccesses { get; set; }
+        public ICollection<SecurityObject> Objects { get; set; }
+
     }
 }

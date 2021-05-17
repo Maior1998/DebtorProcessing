@@ -86,7 +86,7 @@
                     </Button.Content>
                 </Button>
                 <Button
-                    Command="{Binding RevokeRoleObjectAccess}">
+                    Command="{Binding RevokeSecurityObjectAccess}">
                     <Button.Content>
                         <materialDesign:PackIcon Kind="DeleteOutline" Width="30" Height="30"/>
                     </Button.Content>
@@ -95,7 +95,7 @@
             <DataGrid 
                 x:Name="dgObjects"
                 Margin="10" 
-                SelectedItem="{Binding SelectedRoleObjectAccess}"
+                SelectedItem="{Binding SelectedSecurityObject}"
                 ItemsSource="{Binding SelectedRole.RoleObjectAccesses}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Название объекта доступа" Width="*" Binding="{Binding Object.Name}"/>

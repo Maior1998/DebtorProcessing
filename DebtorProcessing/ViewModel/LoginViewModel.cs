@@ -42,8 +42,7 @@ namespace DebtorProcessing.ViewModel
 
             User user = model.Users
                 .Include(x => x.UserRoles)
-                .ThenInclude(x => x.RoleObjectAccesses)
-                .ThenInclude(x => x.Object)
+                .ThenInclude(x => x.Objects)
                 .SingleOrDefault(x =>
                 x.Login.ToLower() == Login.ToLower()
                 && x.PasswordHash.ToLower() == hash.ToLower());

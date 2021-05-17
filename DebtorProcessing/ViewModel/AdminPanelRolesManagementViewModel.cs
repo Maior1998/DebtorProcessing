@@ -23,7 +23,7 @@ namespace DebtorProcessing.ViewModel
     {
         [Reactive] public ICollection<UserRole> Roles { get; set; } = new List<UserRole>();
         [Reactive] public UserRole SelectedRole { get; set; }
-        [Reactive] public RoleObjectAccess SelectedRoleObjectAccess { get; set; }
+        [Reactive] public SecurityObject SelectedSecurityObject { get; set; }
         private Guid[] availiableObjectsToUse = new Guid[0];
 
         public AdminPanelRolesManagementViewModel()
@@ -36,8 +36,7 @@ namespace DebtorProcessing.ViewModel
         {
             Context db = new Context();
             Roles = db.UserRoles
-                .Include(x => x.RoleObjectAccesses)
-                .ThenInclude(x => x.Object)
+                .Include(x => x.Objects)
                 .ToArray();
         }
         private void UpdateAvailiableObjects()
@@ -88,39 +87,32 @@ namespace DebtorProcessing.ViewModel
         {
             ChooseRoleObjectAccessWindow chooseRoleObjectAccessWindow = new()
             {
-                ExcludingObjects = SelectedRole.RoleObjectAccesses.Select(x => x.ObjectId).ToArray()
+                ExcludingObjects = SelectedRole.Objects.Select(x => x.Id).ToArray()
             };
             if (!chooseRoleObjectAccessWindow.ShowDialog().Value) return;
             Context db = new Context();
-            RoleObjectAccess roleObjectAccess = new()
-            {
-                ObjectId = chooseRoleObjectAccessWindow.SelectedSecurityObject.Id,
-                UserRoleId = SelectedRole.Id
-            };
-            db.RoleObjectAccesses.Add(roleObjectAccess);
+            UserRole role = db.UserRoles.Single(x => x.Id == SelectedRole.Id);
+            role.Objects.Add(db.SecurityObjects.Single(x => x.Id == chooseRoleObjectAccessWindow.SelectedSecurityObject.Id));
             db.SaveChanges();
-            SelectedRole.RoleObjectAccesses.Add(new()
-            {
-                Id = roleObjectAccess.Id,
-                Object = chooseRoleObjectAccessWindow.SelectedSecurityObject,
-                ObjectId = chooseRoleObjectAccessWindow.SelectedSecurityObject.Id
-            });
+            SelectedRole.Objects.Add(chooseRoleObjectAccessWindow.SelectedSecurityObject);
             OnObjectsChanged?.Invoke();
 
-        }, () => SelectedRole != null && availiableObjectsToUse.Except(SelectedRole.RoleObjectAccesses.Select(x => x.ObjectId)).Any());
+        }, () => SelectedRole != null && availiableObjectsToUse.Except(SelectedRole.Objects.Select(x => x.Id)).Any());
 
 
-        private DelegateCommand revokeRoleObjectAccess;
-        public DelegateCommand RevokeRoleObjectAccess => revokeRoleObjectAccess ??= new DelegateCommand(() =>
+        private DelegateCommand revokeSecurityObjectAccess;
+        public DelegateCommand RevokeSecurityObjectAccess => revokeSecurityObjectAccess ??= new DelegateCommand(() =>
         {
-            if (MessageBox.Show($"Вы действительно хотите отозвать у роли {SelectedRole.Name} право {SelectedRoleObjectAccess.Object.Name}?", "Удаление роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+            if (MessageBox.Show($"Вы действительно хотите отозвать у роли {SelectedRole.Name} право {SelectedSecurityObject.Name}?", "Удаление роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             Context db = new Context();
-            RoleObjectAccess roleObjectAccess = db.RoleObjectAccesses.Single(x => x.Id == SelectedRoleObjectAccess.Id);
-            db.RoleObjectAccesses.Remove(roleObjectAccess);
-            db.SaveChanges();
-            SelectedRole.RoleObjectAccesses.Remove(SelectedRoleObjectAccess);
+            SecurityObject securityObject = db.SecurityObjects.Single(x => x.Id == SelectedSecurityObject.Id);
+            UserRole role = db.UserRoles
+                .Include(x => x.Objects)
+                .Single(x => x.Id == SelectedRole.Id);
+            role.Objects.Remove(securityObject);
+            SelectedRole.Objects.Remove(SelectedSecurityObject);
             OnObjectsChanged?.Invoke();
-        }, () => SelectedRoleObjectAccess != null);
+        }, () => SelectedSecurityObject != null);
 
         public event Action OnRolesChanged;
         public event Action OnObjectsChanged;

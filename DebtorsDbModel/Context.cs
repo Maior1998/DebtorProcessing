@@ -41,26 +41,17 @@ namespace DebtorsDbModel
                 .WithMany(p => p.UserRoles)
                 .UsingEntity(j => j.ToTable("Users_Roles"));
 
+
+            modelBuilder
+                .Entity<UserRole>()
+                .HasMany(p => p.Objects)
+                .WithMany(p => p.Roles)
+                .UsingEntity(j => j.ToTable("Roles_Objects"));
+
             modelBuilder
                 .Entity<Debtor>()
                 .HasMany(x => x.Payments)
                 .WithOne(x => x.Debtor);
-
-            modelBuilder.Entity<RoleObjectAccess>()
-                .HasOne(x => x.Object)
-                .WithMany(x => x.RoleObjectAccesses)
-                .HasForeignKey(x => x.ObjectId)
-                .IsRequired();
-
-            modelBuilder.Entity<RoleObjectAccess>()
-                .HasOne(x => x.UserRole)
-                .WithMany(x => x.RoleObjectAccesses)
-                .HasForeignKey(x => x.UserRoleId)
-                .IsRequired();
-
-            modelBuilder.Entity<RoleObjectAccess>()
-                .HasIndex(x => new { x.ObjectId, x.UserRoleId })
-                .IsUnique();
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Debtors)
@@ -70,7 +61,6 @@ namespace DebtorsDbModel
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Debtor> Debtors { get; set; }
         public virtual DbSet<DebtorPayment> DebtorPayments { get; set; }
-        public virtual DbSet<RoleObjectAccess> RoleObjectAccesses { get; set; }
         public virtual DbSet<SecurityObject> SecurityObjects { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
@@ -85,10 +75,7 @@ namespace DebtorsDbModel
                 FullName = "Администратор",
                 UserRoles = new List<UserRole>()
                 {
-                    new UserRole(){Name = "Role 1", RoleObjectAccesses = new List<RoleObjectAccess>()
-                    {
-
-                    }
+                    new UserRole(){Name = "Role 1",
                     }
                 }
             });
@@ -126,18 +113,13 @@ namespace DebtorsDbModel
             model.SecurityObjects.AddRange(SecurityObject.ObjectNameToIdTranslator.Select(x => new SecurityObject() { Id = x.Value, Name = x.Key }));
             model.SaveChanges();
             UserRole role = model.UserRoles
-                .Include(x => x.RoleObjectAccesses)
                 .OrderBy(x => x.Name).Last();
             User user = model.Users.Single(x => x.Login == "admin");
-            role.RoleObjectAccesses.Clear();
             model.SaveChanges();
             SecurityObject[] objects = model.SecurityObjects.ToArray();
             for (int i = 0; i < objects.Length; i++)
             {
-                role.RoleObjectAccesses.Add(new()
-                {
-                    Object = objects[i]
-                });
+                role.Objects.Add(objects[i]);
             }
 
             model.SaveChanges();

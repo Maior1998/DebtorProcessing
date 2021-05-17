@@ -22,9 +22,9 @@ namespace DebtorsDbModel.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// Список всех ролей, имеющих доступ к данному объекту.
+        /// Список ролей, которые имеют доступ к данному объекту.
         /// </summary>
-        public ICollection<RoleObjectAccess> RoleObjectAccesses = new List<RoleObjectAccess>();
+        public ICollection<UserRole> Roles = new List<UserRole>();
 
         /// <summary>
         /// Словарь для первичной инициализации ролей в системе.

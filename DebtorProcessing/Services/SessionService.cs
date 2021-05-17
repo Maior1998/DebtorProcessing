@@ -27,7 +27,7 @@ namespace DebtorProcessing.Services
             {
                 currentLoggedInUser = value;
                 accessesObjects = CurrentLoggedInUser.UserRoles.Aggregate(Enumerable.Empty<Guid>(),
-                    (current, nextRole) => current.Union(nextRole.RoleObjectAccesses.Select(x => x.Object.Id))).ToArray();
+                    (current, nextRole) => current.Union(nextRole.Objects.Select(x => x.Id))).ToArray();
                 HasAccessToAdminPanel = CheckRight("Доступ к панели администрирования");
                 CanEditNotOwnedDebtorsData = CheckRight("Доступ на изменения данных должников, по которым сотрудник не является ответственным");
                 CanEditDebtorsTable = CheckRight("Добавление или удаление должников");

@@ -114,30 +114,20 @@ namespace DebtorsDbModel
                 },
             });
 
-            model.UserRoles.Add(new UserRole()
-            {
-                Name = "Role 2",
-            });
-            model.UserRoles.Add(new UserRole()
-            {
-                Name = "Role 3",
+            string[] roles = {
+                "Специалист по мониторингу судебных актов",
+                "Руководитель отдела исполнительного производства",
+                "Системный администратор"
+            };
 
-            });
-            model.UserRoles.Add(new UserRole()
-            {
-                Name = "Role 4"
-            });
-            model.UserRoles.Add(new UserRole()
-            {
-                Name = "Role 5",
+            model.UserRoles.AddRange(roles.Select(x => new UserRole() { Name = x }));
 
-            });
 
             model.SecurityObjects.AddRange(SecurityObject.ObjectNameToIdTranslator.Select(x => new SecurityObject() { Id = x.Value, Name = x.Key }));
             model.SaveChanges();
             UserRole role = model.UserRoles
-                .Include(x=>x.RoleObjectAccesses)
-                .OrderBy(x=>x.Name).Last();
+                .Include(x => x.RoleObjectAccesses)
+                .OrderBy(x => x.Name).Last();
             User user = model.Users.Single(x => x.Login == "admin");
             role.RoleObjectAccesses.Clear();
             model.SaveChanges();

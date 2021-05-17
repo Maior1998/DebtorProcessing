@@ -6,12 +6,29 @@ using System.Threading.Tasks;
 
 namespace DebtorsDbModel.Model
 {
+    /// <summary>
+    /// Представляет собой объект модели безопасности системы.
+    /// </summary>
     public class SecurityObject
     {
+        /// <summary>
+        /// Номер записи в базе данных.
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название данного объекта доступа.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Список всех ролей, имеющих доступ к данному объекту.
+        /// </summary>
         public ICollection<RoleObjectAccess> RoleObjectAccesses = new List<RoleObjectAccess>();
 
+        /// <summary>
+        /// Словарь для первичной инициализации ролей в системе.
+        /// </summary>
         public static readonly Dictionary<string, Guid> ObjectNameToIdTranslator = new()
         {
             { "Доступ к панели администрирования", Guid.Parse("27d4e80b-694e-4085-a117-7b4736defd25") },

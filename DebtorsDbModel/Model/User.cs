@@ -9,12 +9,30 @@ using System.Threading.Tasks;
 
 namespace DebtorsDbModel.Model
 {
+    /// <summary>
+    /// Представляет собой пользователя (субъекта) системы.
+    /// </summary>
     public class User
     {
+        /// <summary>
+        /// Номер записи в базе данных.
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// ФИО пользователя.
+        /// </summary>
         public string FullName { get; set; }
+
+        /// <summary>
+        /// Логин пользователя. Является обязательным на стороне БД.
+        /// </summary>
         [Required]
         public string Login { get; set; }
+
+        /// <summary>
+        /// Хеш пароля пользователя. Солится.
+        /// </summary>
         [Required]
         public string PasswordHash { get; set; }
 
@@ -25,6 +43,11 @@ namespace DebtorsDbModel.Model
             return $"{source}{Salt}";
         }
 
+        /// <summary>
+        /// Получает хеш из пароля пользователя.
+        /// </summary>
+        /// <param name="value">Строка-пароль, от которой необходимо получить хеш значение..</param>
+        /// <returns></returns>
         public static string GetHashedString(string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return string.Empty;
@@ -39,7 +62,14 @@ namespace DebtorsDbModel.Model
             return Sb.ToString();
         }
 
+        /// <summary>
+        /// Список должников, закрепленных за данным сотрудником.
+        /// </summary>
         public ICollection<Debtor> Debtors { get; set; } = new List<Debtor>();
+
+        /// <summary>
+        /// Список ролей, которые принадлежат данному пользователю.
+        /// </summary>
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     }

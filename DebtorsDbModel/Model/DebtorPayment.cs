@@ -7,11 +7,26 @@ using System.Threading.Tasks;
 
 namespace DebtorsDbModel.Model
 {
+    /// <summary>
+    /// Представляет собой платеж по должнику.
+    /// </summary>
     public class DebtorPayment
     {
+        /// <summary>
+        /// Номер записи в базе данных.
+        /// </summary>
         public Guid Id { get; set; }
+        /// <summary>
+        /// Сумма этого платежа.
+        /// </summary>
         public decimal Amount { get; set; } = 0;
+        /// <summary>
+        /// Дата проведения этого платежа.
+        /// </summary>
         public DateTime Date { get; set; } = DateTime.Now;
+        /// <summary>
+        /// Должник, по которому выполнен данный платеж. Является обязательным в БД.
+        /// </summary>
         [Required] public Debtor Debtor { get; set; }
     }
 }

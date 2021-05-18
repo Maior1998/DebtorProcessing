@@ -25,12 +25,12 @@ namespace DebtorsDbModel.Model
         /// <summary>
         /// Список пользователей, имеющих данную роль.
         /// </summary>
-        public ICollection<User> Users { get; set; }
+        public ICollection<User> Users { get; set; } = new List<User>();
 
         /// <summary>
         /// Объекты, к которым имеет доступ данная роль.
         /// </summary>
-        public ICollection<SecurityObject> Objects { get; set; }
+        public ICollection<SecurityObject> Objects { get; set; } = new List<SecurityObject>();
 
     }
 }

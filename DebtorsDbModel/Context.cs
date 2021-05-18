@@ -68,18 +68,13 @@ namespace DebtorsDbModel
         {
             model.Database.EnsureDeleted();
             model.Database.EnsureCreated();
-            model.Users.Add(new User()
+            model.Users.Add(new()
             {
                 Login = "admin",
                 PasswordHash = User.GetHashedString("admin"),
                 FullName = "Администратор",
-                UserRoles = new List<UserRole>()
-                {
-                    new UserRole(){Name = "Role 1",
-                    }
-                }
             });
-            model.Users.Add(new User()
+            model.Users.Add(new()
             {
                 Login = "user",
                 PasswordHash = User.GetHashedString("user"),
@@ -87,7 +82,7 @@ namespace DebtorsDbModel
             });
             model.SaveChanges();
 
-            model.Debtors.Add(new Debtor()
+            model.Debtors.Add(new()
             {
                 FullName = "Ivanov Ivan Ivanovich",
                 ContractNumber = "8357325235273",
@@ -97,7 +92,7 @@ namespace DebtorsDbModel
                 StartDebt = 1234,
                 Payments = new List<DebtorPayment>()
                 {
-                    new DebtorPayment() {Amount = 123, Date = DateTime.Today}
+                    new() {Amount = 123, Date = DateTime.Today}
                 },
             });
 

@@ -8,7 +8,7 @@
         Closed="PaymentEditWindow_OnClosed"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=PaymentEditWindowViewModel}"
+        DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=PaymentEditWindowViewModel}"
         Title="Редактирование платежа" Height="200" Width="300">
     <DockPanel LastChildFill="False">
         <DockPanel 

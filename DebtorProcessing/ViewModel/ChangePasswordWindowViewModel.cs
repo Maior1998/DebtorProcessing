@@ -18,7 +18,7 @@ namespace DebtorProcessing.ViewModel
 
         private DelegateCommand save;
 
-        public DelegateCommand Save => save ??= new DelegateCommand(() =>
+        public DelegateCommand Save => save ??= new(() =>
         {
             OnSaved?.Invoke();
         }, () => !string.IsNullOrWhiteSpace(NewPassword) && NewPassword == ConfirmPassword);

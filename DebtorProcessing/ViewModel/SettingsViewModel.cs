@@ -26,12 +26,12 @@ namespace DebtorProcessing.ViewModel
         }
 
         private DelegateCommand changePassword;
-        public DelegateCommand ChangePassword => changePassword ??= new DelegateCommand(() =>
+        public DelegateCommand ChangePassword => changePassword ??= new(() =>
         {
-            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow();
+            ChangePasswordWindow changePasswordWindow = new();
             if (!changePasswordWindow.ShowDialog().Value) return;
             string newPass = changePasswordWindow.NewPassword;
-            Context db = new Context();
+            Context db = new();
             User user = db.Users.Single(x => x.Id == Session.CurrentLoggedInUser.Id);
             user.PasswordHash = User.GetHashedString(newPass);
             db.SaveChanges();

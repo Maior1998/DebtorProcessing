@@ -69,7 +69,9 @@ namespace DebtorProcessing
             services.AddTransient<ChooseRoleObjectAccessWindowViewModel>();
             services.AddTransient<ChangePasswordWindowViewModel>();
             Context model = new();
-            Context.CreateTestData(model);
+            model.Database.EnsureCreated();
+            if (!model.Debtors.Any())
+                Context.CreateTestData(model);
         }
     }
 }

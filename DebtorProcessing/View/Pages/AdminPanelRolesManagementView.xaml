@@ -96,9 +96,9 @@
                 x:Name="dgObjects"
                 Margin="10" 
                 SelectedItem="{Binding SelectedSecurityObject}"
-                ItemsSource="{Binding SelectedRole.RoleObjectAccesses}">
+                ItemsSource="{Binding SelectedRole.Objects}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Название объекта доступа" Width="*" Binding="{Binding Object.Name}"/>
+                    <DataGridTextColumn Header="Название объекта доступа" Width="*" Binding="{Binding Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

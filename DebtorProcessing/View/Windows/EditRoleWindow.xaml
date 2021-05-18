@@ -8,6 +8,7 @@
         Closed="EditRoleWindow_OnClosed"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=EditRoleWindowViewModel}"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="Редактирование роли" Height="120" Width="350">
     <DockPanel>
         <DockPanel Dock="Bottom" LastChildFill="False" Background="LightGray">

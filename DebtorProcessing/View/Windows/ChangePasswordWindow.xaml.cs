@@ -35,7 +35,7 @@ namespace DebtorProcessing.View.Windows
             Close();
         }
 
-        private ChangePasswordWindowViewModel viewModel;
+        private readonly ChangePasswordWindowViewModel viewModel;
 
         private void PbNewPassword_OnPasswordChanged(object sender, RoutedEventArgs e)
         {

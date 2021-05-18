@@ -34,7 +34,7 @@ namespace DebtorProcessing.ViewModel
 
         private void UpdateRoles()
         {
-            Context db = new Context();
+            Context db = new();
             Roles = db.UserRoles
                 .Include(x => x.Objects)
                 .ToArray();
@@ -49,12 +49,12 @@ namespace DebtorProcessing.ViewModel
         private DelegateCommand addRole;
         public DelegateCommand AddRole => addRole ??= new(() =>
         {
-            EditRoleWindow editRoleWindow = new EditRoleWindow()
+            EditRoleWindow editRoleWindow = new()
             {
                 RoleName = "Новая роль"
             };
             if (!editRoleWindow.ShowDialog().Value) return;
-            Context db = new Context();
+            Context db = new();
             UserRole duplicateRole =
                 db.UserRoles.SingleOrDefault(x => x.Name.ToLower() == editRoleWindow.RoleName.ToLower());
             if (duplicateRole != null)
@@ -72,7 +72,7 @@ namespace DebtorProcessing.ViewModel
 
         private DelegateCommand deleteRole;
 
-        public DelegateCommand DeleteRole => deleteRole ??= new DelegateCommand(() =>
+        public DelegateCommand DeleteRole => deleteRole ??= new(() =>
         {
             if (MessageBox.Show($"Вы действительно хотите удалить роль{SelectedRole.Name}?", "Удаление роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             Context db = new();
@@ -90,7 +90,7 @@ namespace DebtorProcessing.ViewModel
                 ExcludingObjects = SelectedRole.Objects.Select(x => x.Id).ToArray()
             };
             if (!chooseRoleObjectAccessWindow.ShowDialog().Value) return;
-            Context db = new Context();
+            Context db = new();
             UserRole role = db.UserRoles.Single(x => x.Id == SelectedRole.Id);
             role.Objects.Add(db.SecurityObjects.Single(x => x.Id == chooseRoleObjectAccessWindow.SelectedSecurityObject.Id));
             db.SaveChanges();
@@ -101,10 +101,10 @@ namespace DebtorProcessing.ViewModel
 
 
         private DelegateCommand revokeSecurityObjectAccess;
-        public DelegateCommand RevokeSecurityObjectAccess => revokeSecurityObjectAccess ??= new DelegateCommand(() =>
+        public DelegateCommand RevokeSecurityObjectAccess => revokeSecurityObjectAccess ??= new(() =>
         {
             if (MessageBox.Show($"Вы действительно хотите отозвать у роли {SelectedRole.Name} право {SelectedSecurityObject.Name}?", "Удаление роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
-            Context db = new Context();
+            Context db = new();
             SecurityObject securityObject = db.SecurityObjects.Single(x => x.Id == SelectedSecurityObject.Id);
             UserRole role = db.UserRoles
                 .Include(x => x.Objects)

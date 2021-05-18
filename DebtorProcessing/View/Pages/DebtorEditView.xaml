@@ -53,7 +53,7 @@
                     DockPanel.Dock="Top"/>
 
                     <TextBox 
-                    Text="{Binding Debtor.StartDebt}"
+                    Text="{Binding Debtor.StartDebt, StringFormat='{}{0:C1}'}"
                     materialDesign:HintAssist.Hint="Первоначальный долг"
                     materialDesign:HintAssist.HelperText="Первоначальный долг"
                     DockPanel.Dock="Top"/>
@@ -117,8 +117,10 @@
                             ItemsSource="{Binding Debtor.Payments}"
                             SelectedItem="{Binding SelectedPayment}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Дата платежа" Binding="{Binding Date}"/>
-                                <DataGridTextColumn Header="Сумма" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Header="Дата платежа" Binding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}"/>
+                                <DataGridTextColumn 
+                                    Header="Сумма" 
+                                    Binding="{Binding Amount, StringFormat='{}{0:C1}'}"/>
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
                                 <ContextMenu>

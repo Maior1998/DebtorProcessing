@@ -36,6 +36,7 @@ namespace DebtorProcessing.ViewModel
             Debtor = trackingContext.Debtors
                 .Include(x => x.Payments)
                 .Single(x => x.Id == id);
+            OnPaymentsChanged?.Invoke();
         }
 
         private Context trackingContext;

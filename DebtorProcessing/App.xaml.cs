@@ -1,29 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
-
 using DebtorProcessing.Services;
-using DebtorProcessing.View;
 using DebtorProcessing.ViewModel;
-
 using DebtorsDbModel;
-using DebtorsDbModel.Model;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using OfficeOpenXml;
 
 namespace DebtorProcessing
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
@@ -37,7 +27,8 @@ namespace DebtorProcessing
             CultureInfo.DefaultThreadCurrentCulture = new("ru-RU");
             Thread.CurrentThread.CurrentCulture = new("ru-RU");
             Thread.CurrentThread.CurrentUICulture = new("ru-RU");
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
 
             ServiceCollection serviceCollection = new();
@@ -47,7 +38,10 @@ namespace DebtorProcessing
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         }
 
-        public static T Resolve<T>() => ServiceProvider.GetRequiredService<T>();
+        public static T Resolve<T>()
+        {
+            return ServiceProvider.GetRequiredService<T>();
+        }
 
         private void ConfigureServices(IServiceCollection services)
         {

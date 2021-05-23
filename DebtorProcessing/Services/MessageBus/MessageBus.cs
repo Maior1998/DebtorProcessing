@@ -2,13 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DebtorProcessing.Services.MessageBus
 {
     /// <summary>
-    /// Представляет собой шину общения разных ViewMaodel между собой.
+    ///     Представляет собой шину общения разных ViewMaodel между собой.
     /// </summary>
     public class MessageBus
     {
@@ -33,18 +32,20 @@ namespace DebtorProcessing.Services.MessageBus
 
         public IDisposable Receive<TMessage>(object receiver, Func<TMessage, Task> handler) where TMessage : IMessage
         {
-            MessageSubscriber sub = new(receiver.GetType(), typeof(TMessage), s => consumers.TryRemove(s, out Func<IMessage, Task> _));
+            MessageSubscriber sub = new(receiver.GetType(), typeof(TMessage),
+                s => consumers.TryRemove(s, out Func<IMessage, Task> _));
 
-            consumers.TryAdd(sub, (@event) => handler((TMessage)@event));
+            consumers.TryAdd(sub, @event => handler((TMessage) @event));
 
             return sub;
         }
 
         public IDisposable Receive<TMessage>(Type receiverType, Func<TMessage, Task> handler) where TMessage : IMessage
         {
-            MessageSubscriber sub = new(receiverType, typeof(TMessage), s => consumers.TryRemove(s, out Func<IMessage, Task> _));
+            MessageSubscriber sub = new(receiverType, typeof(TMessage),
+                s => consumers.TryRemove(s, out Func<IMessage, Task> _));
 
-            consumers.TryAdd(sub, (@event) => handler((TMessage)@event));
+            consumers.TryAdd(sub, @event => handler((TMessage) @event));
 
             return sub;
         }

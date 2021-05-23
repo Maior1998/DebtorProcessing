@@ -1,34 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 using DebtorProcessing.ViewModel;
 
 namespace DebtorProcessing.View
 {
     /// <summary>
-    /// Interaction logic for DebtorsTableView.xaml
+    ///     Interaction logic for DebtorsTableView.xaml
     /// </summary>
     public partial class DebtorsTableView : Page
     {
+        private readonly DebtorsTableViewModel viewModel;
+
         public DebtorsTableView()
         {
             InitializeComponent();
-            viewModel = (DebtorsTableViewModel)DataContext;
+            viewModel = (DebtorsTableViewModel) DataContext;
         }
 
-        private readonly DebtorsTableViewModel viewModel;
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (viewModel.EditDebtor.CanExecute(null))

@@ -1,12 +1,11 @@
 ﻿<Page x:Class="DebtorProcessing.View.AdminPanelView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:DebtorProcessing.View"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:pages="clr-namespace:DebtorProcessing.View.Pages"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       Background="White"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=AdminPanelViewModel}"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -16,14 +15,14 @@
         <TabItem Header="Пользователи">
             <Frame NavigationUIVisibility="Hidden">
                 <Frame.Content>
-                    <local:AdminPanelUsersManagementView/>
+                    <local:AdminPanelUsersManagementView />
                 </Frame.Content>
             </Frame>
         </TabItem>
         <TabItem Header="Роли">
             <Frame NavigationUIVisibility="Hidden">
                 <Frame.Content>
-                    <pages:AdminPanelRolesManagementView/>
+                    <pages:AdminPanelRolesManagementView />
                 </Frame.Content>
             </Frame>
         </TabItem>

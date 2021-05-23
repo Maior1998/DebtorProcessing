@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using DebtorsDbModel.Model;
 
 namespace DebtorProcessing.Model
@@ -20,7 +16,7 @@ namespace DebtorProcessing.Model
                 PassportSeries = 1234,
                 StartDebt = 100000,
                 RegistrationAddress = "Тестовый адрес регистрации",
-                Payments = new List<DebtorPayment>()
+                Payments = new List<DebtorPayment>
                 {
                     new()
                     {
@@ -36,11 +32,9 @@ namespace DebtorProcessing.Model
                     {
                         Amount = 3529,
                         Date = DateTime.Now.AddMonths(-2)
-                    },
+                    }
                 }
-
             };
-
         }
     }
 }

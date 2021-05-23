@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 
 using DebtorProcessing.Services;
@@ -24,6 +20,9 @@ namespace DebtorProcessing.ViewModel
     {
         private readonly PageService pageService;
         private readonly SessionService sessionService;
+
+        private DelegateCommand loginCommand;
+
         public LoginViewModel(PageService pageService, SessionService sessionService)
         {
             this.pageService = pageService;
@@ -32,8 +31,6 @@ namespace DebtorProcessing.ViewModel
 
         [Reactive] public string Login { get; set; }
         [Reactive] public string Password { get; set; }
-
-        private DelegateCommand loginCommand;
 
         public DelegateCommand LoginCommand => loginCommand ??= new(() =>
         {
@@ -44,13 +41,14 @@ namespace DebtorProcessing.ViewModel
                 .Include(x => x.UserRoles)
                 .ThenInclude(x => x.Objects)
                 .SingleOrDefault(x =>
-                x.Login.ToLower() == Login.ToLower()
-                && x.PasswordHash.ToLower() == hash.ToLower());
+                    x.Login.ToLower() == Login.ToLower()
+                    && x.PasswordHash.ToLower() == hash.ToLower());
             if (user == null)
             {
-                MessageBox.Show("Неверный пароль");
+                MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             sessionService.CurrentLoggedInUser = user;
             pageService.NavigateCommand.Execute(new TabsView());
         }, () => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password));

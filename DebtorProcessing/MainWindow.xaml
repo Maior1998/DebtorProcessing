@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DebtorProcessing"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}"
         Title="Обработка должников" Height="450" Width="800">
-    <Frame NavigationUIVisibility="Hidden" Content="{Binding PageService.CurrentPage}"/>
+    <Frame NavigationUIVisibility="Hidden" Content="{Binding PageService.CurrentPage}" />
 </Window>

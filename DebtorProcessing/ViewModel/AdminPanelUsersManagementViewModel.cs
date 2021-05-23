@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
+using DebtorProcessing.View.Windows;
 
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
@@ -23,7 +21,18 @@ namespace DebtorProcessing.ViewModel
 {
     public class AdminPanelUsersManagementViewModel : ReactiveObject
     {
-        private SessionService session;
+        private DelegateCommand addRoleToUser;
+
+
+        private DelegateCommand addUser;
+
+        private Guid[] availiableRolesToUse = new Guid[0];
+
+        private DelegateCommand deleteUser;
+
+        private DelegateCommand revokeRoleFromUser;
+        private readonly SessionService session;
+
         public AdminPanelUsersManagementViewModel(SessionService session)
         {
             this.session = session;
@@ -31,31 +40,14 @@ namespace DebtorProcessing.ViewModel
             LoadUsers();
         }
 
-        private void UpdateAvailiableRoles()
-        {
-            Context db = new();
-            availiableRolesToUse = db.UserRoles.Select(x => x.Id).ToArray();
-        }
-
-        private Guid[] availiableRolesToUse = new Guid[0];
-
-        private void LoadUsers()
-        {
-            Context context = new();
-
-            Users = context.Users.Include(x => x.UserRoles).Where(x => x.Id != session.CurrentLoggedInUser.Id)
-                .ToList();
-        }
-
         [Reactive] public ICollection<User> Users { get; set; }
         [Reactive] public User SelectedUser { get; set; }
         [Reactive] public UserRole SelectedUserRole { get; set; }
 
-        private DelegateCommand deleteUser;
-
         public DelegateCommand DeleteUser => deleteUser ??= new(() =>
         {
-            if (MessageBox.Show($"Вы действительно хотите удалить сотрудника {SelectedUser.FullName}?", "Удаление сотрудника", MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
+            if (MessageBox.Show($"Вы действительно хотите удалить сотрудника {SelectedUser.FullName}?",
+                    "Удаление сотрудника", MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
                 MessageBoxResult.Yes) return;
             Context db = new();
             User deletingUser = db.Users.Single(x => x.Id == SelectedUser.Id);
@@ -63,11 +55,7 @@ namespace DebtorProcessing.ViewModel
             db.SaveChanges();
             Users.Remove(SelectedUser);
             OnUsersChanged?.Invoke();
-
         }, () => SelectedUser != null && SelectedUser.Id != session.CurrentLoggedInUser.Id);
-
-
-        private DelegateCommand addUser;
 
         public DelegateCommand AddUser => addUser ??= new(() =>
         {
@@ -97,7 +85,24 @@ namespace DebtorProcessing.ViewModel
             OnUsersChanged?.Invoke();
         });
 
-        private DelegateCommand addRoleToUser;
+
+        private DelegateCommand changeUserPassword;
+        public DelegateCommand ChangeUserPassword => changeUserPassword ??= new DelegateCommand(() =>
+        {
+            ChangePasswordWindow changePasswordWindow = new();
+            if (!changePasswordWindow.ShowDialog().Value) return;
+            string hash = User.GetHashedString(changePasswordWindow.NewPassword);
+            Context db = new Context();
+            User user = db.Users.Single(x => x.Id == SelectedUser.Id);
+            user.PasswordHash = hash;
+            db.SaveChanges();
+            MessageBox.Show(
+                "Пароль успешно установлен",
+                "Изменение пароля пользователя",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+        }, () => SelectedUser != null);
 
         public DelegateCommand AddRoleToUser => addRoleToUser ??= new(() =>
         {
@@ -118,11 +123,11 @@ namespace DebtorProcessing.ViewModel
             && SelectedUser.Id != session.CurrentLoggedInUser.Id
             && availiableRolesToUse.Except(SelectedUser.UserRoles.Select(x => x.Id)).Any());
 
-        private DelegateCommand revokeRoleFromUser;
-
         public DelegateCommand RevokeRoleFromUser => revokeRoleFromUser ??= new(() =>
         {
-            if (MessageBox.Show($"Вы действительно хотите отозвать роль {SelectedUserRole.Name} у сотрудника {SelectedUser.FullName}?", "Отзыв роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
+            if (MessageBox.Show(
+                    $"Вы действительно хотите отозвать роль {SelectedUserRole.Name} у сотрудника {SelectedUser.FullName}?",
+                    "Отзыв роли", MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
                 MessageBoxResult.Yes) return;
             Context db = new();
             User user = db.Users.Include(x => x.UserRoles).Single(x => x.Id == SelectedUser.Id);
@@ -133,8 +138,21 @@ namespace DebtorProcessing.ViewModel
             OnUserRolesChanged?.Invoke();
         }, () => SelectedUserRole != null);
 
+        private void UpdateAvailiableRoles()
+        {
+            Context db = new();
+            availiableRolesToUse = db.UserRoles.Select(x => x.Id).ToArray();
+        }
+
+        private void LoadUsers()
+        {
+            Context context = new();
+
+            Users = context.Users.Include(x => x.UserRoles).Where(x => x.Id != session.CurrentLoggedInUser.Id)
+                .ToList();
+        }
+
         public event Action OnUserRolesChanged;
         public event Action OnUsersChanged;
-
     }
 }

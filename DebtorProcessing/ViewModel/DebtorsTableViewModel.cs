@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-
 using DebtorProcessing.Model;
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
-
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
-
 using DevExpress.Mvvm;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-
 using OfficeOpenXml;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -28,8 +18,18 @@ namespace DebtorProcessing.ViewModel
 {
     public class DebtorsTableViewModel : ReactiveObject
     {
-        private SessionService session;
-        private PageService pageService;
+        private DelegateCommand addDebtor;
+
+        private DelegateCommand deleteDebtor;
+
+        private DelegateCommand editDebtor;
+
+        private DelegateCommand exportCurrentDebtorsCollection;
+        private readonly PageService pageService;
+
+        private DelegateCommand search;
+        private readonly SessionService session;
+
         public DebtorsTableViewModel(SessionService session, PageService pageService)
         {
             this.session = session;
@@ -37,32 +37,6 @@ namespace DebtorProcessing.ViewModel
             UpdateDebtors();
         }
 
-        private IQueryable<Debtor> SetUserFilter(IQueryable<Debtor> source)
-        {
-            if (!session.CanViewNotOwnedDebtors)
-                return source.Where(x => x.Responsible.Id == session.CurrentLoggedInUser.Id);
-            else
-                return source;
-        }
-
-        private IQueryable<Debtor> SetSearchFilter(IQueryable<Debtor> source)
-        {
-            if (string.IsNullOrWhiteSpace(SearchText))
-                return source;
-            else
-                return source.Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower()));
-        }
-
-        public void UpdateDebtors()
-        {
-            Context model = new();
-            Debtors = SetSearchFilter(SetUserFilter(model.Debtors))
-                    .Include(x => x.Responsible)
-                    .Include(x => x.Payments)
-                    .ToArray();
-        }
-
-        private DelegateCommand addDebtor;
         public DelegateCommand AddDebtor => addDebtor ??= new(() =>
         {
             Context context = new();
@@ -77,13 +51,10 @@ namespace DebtorProcessing.ViewModel
             EditDebtor.Execute(null);
         }, () => session.CanEditDebtorsTable);
 
-        private DelegateCommand editDebtor;
-        public DelegateCommand EditDebtor => editDebtor ??= new(() =>
-        {
-            pageService.NavigateCommand.Execute(new DebtorEditView(SelectedDebtor.Id));
-        }, () => SelectedDebtor != null);
+        public DelegateCommand EditDebtor => editDebtor ??=
+            new(() => { pageService.NavigateCommand.Execute(new DebtorEditView(SelectedDebtor.Id)); },
+                () => SelectedDebtor != null);
 
-        private DelegateCommand deleteDebtor;
         public DelegateCommand DeleteDebtor => deleteDebtor ??= new(() =>
         {
             if (MessageBox.Show(
@@ -97,8 +68,6 @@ namespace DebtorProcessing.ViewModel
                 UpdateDebtors();
             }
         }, () => SelectedDebtor != null && session.CanEditDebtorsTable);
-
-        private DelegateCommand exportCurrentDebtorsCollection;
 
         public DelegateCommand ExportCurrentDebtorsCollection =>
             exportCurrentDebtorsCollection ??= new(() =>
@@ -136,8 +105,29 @@ namespace DebtorProcessing.ViewModel
         [Reactive] public Debtor[] Debtors { get; set; } = new Debtor[0];
         [Reactive] public Debtor SelectedDebtor { get; set; }
         [Reactive] public string SearchText { get; set; }
-
-        private DelegateCommand search;
         public DelegateCommand Search => search ??= new(UpdateDebtors);
+
+        private IQueryable<Debtor> SetUserFilter(IQueryable<Debtor> source)
+        {
+            if (!session.CanViewNotOwnedDebtors)
+                return source.Where(x => x.Responsible.Id == session.CurrentLoggedInUser.Id);
+            return source;
+        }
+
+        private IQueryable<Debtor> SetSearchFilter(IQueryable<Debtor> source)
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+                return source;
+            return source.Where(x => x.ContractNumber.ToLower().Contains(SearchText.ToLower()));
+        }
+
+        public void UpdateDebtors()
+        {
+            Context model = new();
+            Debtors = SetSearchFilter(SetUserFilter(model.Debtors))
+                .Include(x => x.Responsible)
+                .Include(x => x.Payments)
+                .ToArray();
+        }
     }
 }

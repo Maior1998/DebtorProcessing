@@ -1,32 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 using DebtorProcessing.ViewModel;
 
 namespace DebtorProcessing.View
 {
     /// <summary>
-    /// Interaction logic for EditUserWindow.xaml
+    ///     Interaction logic for EditUserWindow.xaml
     /// </summary>
     public partial class EditUserWindow : Window
     {
+        private readonly EditUserWindowViewModel viewModel;
+
         public EditUserWindow()
         {
             InitializeComponent();
-            viewModel = (EditUserWindowViewModel)DataContext;
+            viewModel = (EditUserWindowViewModel) DataContext;
             viewModel.OnSaved += ViewModel_OnSaved;
         }
+
+        public string Password { get; set; } = string.Empty;
+        public string Login { get; set; }
+        public string FullName { get; set; }
+        public bool IsPassordEditModeEnabled { get; set; }
 
         public new bool? ShowDialog()
         {
@@ -37,10 +32,6 @@ namespace DebtorProcessing.View
             return base.ShowDialog();
         }
 
-        public string Password { get; set; } = string.Empty;
-        public string Login { get; set; }
-        public string FullName { get; set; }
-        public bool IsPassordEditModeEnabled { get; set; }
         private void ViewModel_OnSaved()
         {
             Login = viewModel.Login;
@@ -48,8 +39,6 @@ namespace DebtorProcessing.View
             DialogResult = true;
             Close();
         }
-
-        private readonly EditUserWindowViewModel viewModel;
 
         private void EditUserWindow_OnClosed(object sender, EventArgs e)
         {

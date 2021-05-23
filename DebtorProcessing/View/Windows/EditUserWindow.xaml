@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DebtorProcessing.View"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -12,35 +11,38 @@
         Title="Редактирование данных сотрудника" Height="250" Width="400">
     <DockPanel LastChildFill="False">
         <DockPanel Dock="Bottom" LastChildFill="False" Background="LightGray">
-            <Button 
-                Content="Отмена" 
-                Margin="5"/>
-            <Button 
-                Content="Сохранить" 
-                DockPanel.Dock="Right" 
+            <Button
+                Content="Отмена"
+                Margin="5" />
+            <Button
+                Content="Сохранить"
+                DockPanel.Dock="Right"
                 Command="{Binding SaveCommand}"
-                Margin="5"/>
+                Margin="5" />
         </DockPanel>
-        <TextBox 
+        <TextBox
+            MaxLength="30"
             Text="{Binding FullName}"
             materialDesign:HintAssist.Hint="Имя сотрудника"
             materialDesign:HintAssist.HelperText="Имя сотрудника"
-            
-            Margin="5 15"
-            DockPanel.Dock="Top"/>
 
-        <TextBox 
+            Margin="5 15"
+            DockPanel.Dock="Top" />
+
+        <TextBox
+            MaxLength="15"
             Text="{Binding Login}"
             Margin="5 15"
             materialDesign:HintAssist.Hint="Логин"
             materialDesign:HintAssist.HelperText="Логин"
-            DockPanel.Dock="Top"/>
-        <PasswordBox 
+            DockPanel.Dock="Top" />
+        <PasswordBox
+            MaxLength="20"
             x:Name="pbPass"
             Margin="5 15"
             PasswordChanged="PbPass_OnPasswordChanged"
             materialDesign:HintAssist.Hint="Пароль"
             materialDesign:HintAssist.HelperText="Пароль"
-            DockPanel.Dock="Top"/>
+            DockPanel.Dock="Top" />
     </DockPanel>
 </Window>

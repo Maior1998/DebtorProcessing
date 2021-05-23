@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-
 using DebtorProcessing.Services;
 using DebtorProcessing.View.Windows;
-
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
-
 using DevExpress.Mvvm;
-
 using ReactiveUI;
 
 namespace DebtorProcessing.ViewModel
 {
     public class SettingsViewModel : ReactiveObject
     {
-        public SessionService Session { get; private set; }
+        private DelegateCommand changePassword;
+
         public SettingsViewModel(SessionService session)
         {
             Session = session;
         }
 
-        private DelegateCommand changePassword;
+        public SessionService Session { get; }
+
         public DelegateCommand ChangePassword => changePassword ??= new(() =>
         {
             ChangePasswordWindow changePasswordWindow = new();

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DebtorProcessing.View.Windows"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Closed="EditRoleWindow_OnClosed"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=EditRoleWindowViewModel}"
@@ -12,15 +11,16 @@
         Title="Редактирование роли" Height="120" Width="350">
     <DockPanel>
         <DockPanel Dock="Bottom" LastChildFill="False" Background="LightGray">
-            <Button Margin="5" Content="Отмена"/>
-            <Button DockPanel.Dock="Right" Margin="5" Content="Сохранить"/>
+            <Button Margin="5" Content="Отмена" />
+            <Button DockPanel.Dock="Right" Margin="5" Content="Сохранить" />
         </DockPanel>
         <DockPanel Dock="Top" LastChildFill="False">
-            <TextBox 
-                DockPanel.Dock="Top" 
+            <TextBox
+                MaxLength="50"
+                DockPanel.Dock="Top"
                 Margin="5"
                 materialDesign:HintAssist.Hint="Название роли"
-                materialDesign:HintAssist.HelperText="Название роли"/>
+                materialDesign:HintAssist.HelperText="Название роли" />
         </DockPanel>
     </DockPanel>
 </Window>

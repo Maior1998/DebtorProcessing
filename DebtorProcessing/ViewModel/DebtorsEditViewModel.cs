@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
-
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
-
 using DevExpress.Mvvm;
-
 using Microsoft.EntityFrameworkCore;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -22,45 +14,39 @@ namespace DebtorProcessing.ViewModel
 {
     public class DebtorsEditViewModel : ReactiveObject
     {
+        private DelegateCommand addPayment;
 
-        public PageService PageService { get; set; }
+        private DelegateCommand backCommand;
+
+        private DelegateCommand deletePayment;
+
+        private DelegateCommand editPayment;
+
+        private DelegateCommand save;
         public SessionService session;
+
+        private Context trackingContext;
+
         public DebtorsEditViewModel(PageService pageService, SessionService session)
         {
             PageService = pageService;
             this.session = session;
         }
-        public void SetDebtor(Guid id)
-        {
-            trackingContext = new();
-            Debtor = trackingContext.Debtors
-                .Include(x => x.Payments)
-                .Single(x => x.Id == id);
-            OnPaymentsChanged?.Invoke();
-        }
 
-        private Context trackingContext;
-
-        private DelegateCommand backCommand;
+        public PageService PageService { get; set; }
         public DelegateCommand BackCommand => backCommand ??= new(GoBack);
 
         [Reactive] public Debtor Debtor { get; set; }
         [Reactive] public DebtorPayment SelectedPayment { get; set; }
 
-        private DelegateCommand save;
-
-        private void GoBack()
-        {
-            PageService.BackCommand.Execute(null);
-        }
-
         public DelegateCommand Save => save ??= new(() =>
-        {
-            trackingContext.SaveChanges();
-            GoBack();
-        }, () => session.CanEditNotOwnedDebtorsData || (Debtor.Responsible != null && Debtor.Responsible.Id == session.CurrentLoggedInUser.Id));
+            {
+                trackingContext.SaveChanges();
+                GoBack();
+            },
+            () => session.CanEditNotOwnedDebtorsData ||
+                  Debtor.Responsible != null && Debtor.Responsible.Id == session.CurrentLoggedInUser.Id);
 
-        private DelegateCommand addPayment;
         public DelegateCommand AddPayment => addPayment ??= new(() =>
         {
             PaymentEditWindow paymentEditWindow = new();
@@ -74,7 +60,6 @@ namespace DebtorProcessing.ViewModel
             OnPaymentsChanged?.Invoke();
         });
 
-        private DelegateCommand editPayment;
         public DelegateCommand EditPayment => editPayment ??= new(() =>
         {
             PaymentEditWindow paymentEditWindow = new()
@@ -88,7 +73,6 @@ namespace DebtorProcessing.ViewModel
             OnPaymentsChanged?.Invoke();
         });
 
-        private DelegateCommand deletePayment;
         public DelegateCommand DeletePayment => deletePayment ??= new(() =>
         {
             if (MessageBox.Show("Вы уверены, что хотите удалить этот платеж?", "Удаление платежа",
@@ -96,6 +80,20 @@ namespace DebtorProcessing.ViewModel
             Debtor.Payments.Remove(SelectedPayment);
             OnPaymentsChanged?.Invoke();
         });
+
+        public void SetDebtor(Guid id)
+        {
+            trackingContext = new();
+            Debtor = trackingContext.Debtors
+                .Include(x => x.Payments)
+                .Single(x => x.Id == id);
+            OnPaymentsChanged?.Invoke();
+        }
+
+        private void GoBack()
+        {
+            PageService.BackCommand.Execute(null);
+        }
 
         public event Action OnPaymentsChanged;
     }

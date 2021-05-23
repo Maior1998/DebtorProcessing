@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 using DebtorProcessing.ViewModel;
 
 namespace DebtorProcessing.View
 {
     /// <summary>
-    /// Interaction logic for PaymentEditWindow.xaml
+    ///     Interaction logic for PaymentEditWindow.xaml
     /// </summary>
     public partial class PaymentEditWindow : Window
     {
+        private PaymentEditWindowViewModel viewModel;
+
         public PaymentEditWindow()
         {
             InitializeComponent();
-            viewModel = (PaymentEditWindowViewModel)DataContext;
+            viewModel = (PaymentEditWindowViewModel) DataContext;
             viewModel.OnSaved += ViewModel_OnSaved;
         }
 
@@ -45,8 +35,6 @@ namespace DebtorProcessing.View
             DialogResult = true;
             Close();
         }
-
-        private PaymentEditWindowViewModel viewModel;
 
         private void PaymentEditWindow_OnClosed(object sender, EventArgs e)
         {

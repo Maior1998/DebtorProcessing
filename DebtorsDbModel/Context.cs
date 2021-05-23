@@ -27,9 +27,6 @@ namespace DebtorsDbModel
             //optionsBuilder.UseInMemoryDatabase("Test");
             optionsBuilder.UseSqlite(@"Data Source=./debtors.db");
             base.OnConfiguring(optionsBuilder);
-
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

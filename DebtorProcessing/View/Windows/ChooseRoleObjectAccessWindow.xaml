@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DebtorProcessing.View.Windows"
         xmlns:viewModel="clr-namespace:DebtorProcessing.ViewModel"
         Closed="ChooseRoleObjectAccessWindow_OnClosed"
         mc:Ignorable="d"
@@ -12,27 +11,28 @@
         WindowStartupLocation="CenterScreen"
         Title="Выбор объекта доступа" Height="250" Width="500">
     <DockPanel>
-        <DockPanel 
-            Dock="Bottom" 
+        <DockPanel
+            Dock="Bottom"
             LastChildFill="False"
             Background="LightGray">
-            <Button Content="Отмена" Margin="5" IsCancel="True"/>
-            <Button 
-                Content="Выбрать" 
-                DockPanel.Dock="Right" 
-                IsDefault="True" 
-                Command="{Binding Save}" 
-                Margin="5"/>
+            <Button Content="Отмена" Margin="5" IsCancel="True" />
+            <Button
+                Content="Выбрать"
+                DockPanel.Dock="Right"
+                IsDefault="True"
+                Command="{Binding Save}"
+                Margin="5" />
         </DockPanel>
         <DockPanel>
             <ScrollViewer Margin="5">
                 <ItemsControl ItemsSource="{Binding SecurityObjects}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type viewModel:ChooseRoleObjectAccessWindowViewModel+SecurityObjectSelectingItem}">
-                            <RadioButton 
-                                IsChecked="{Binding IsSelected}" 
-                                Content="{Binding SecurityObject.Name}" 
-                                GroupName="SelectingRole"/>
+                        <DataTemplate
+                            DataType="{x:Type viewModel:ChooseRoleObjectAccessWindowViewModel+SecurityObjectSelectingItem}">
+                            <RadioButton
+                                IsChecked="{Binding IsSelected}"
+                                Content="{Binding SecurityObject.Name}"
+                                GroupName="SelectingRole" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

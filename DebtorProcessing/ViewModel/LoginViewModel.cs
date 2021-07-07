@@ -3,6 +3,7 @@ using System.Windows;
 
 using DebtorProcessing.Services;
 using DebtorProcessing.View;
+using DebtorProcessing.View.Pages;
 
 using DebtorsDbModel;
 using DebtorsDbModel.Model;
@@ -21,7 +22,7 @@ namespace DebtorProcessing.ViewModel
         private readonly PageService pageService;
         private readonly SessionService sessionService;
 
-        private DelegateCommand loginCommand;
+        private AsyncCommand loginCommand;
 
         public LoginViewModel(PageService pageService, SessionService sessionService)
         {
@@ -32,25 +33,24 @@ namespace DebtorProcessing.ViewModel
         [Reactive] public string Login { get; set; }
         [Reactive] public string Password { get; set; }
 
-        public DelegateCommand LoginCommand => loginCommand ??= new(() =>
-        {
-            string hash = User.GetHashedString(Password);
-            Context model = new();
+        public AsyncCommand LoginCommand => loginCommand ??= new(async () =>
+       {
+           string hash = User.GetHashedString(Password);
+           Context model = new();
 
-            User user = model.Users
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Objects)
-                .SingleOrDefault(x =>
-                    x.Login.ToLower() == Login.ToLower()
-                    && x.PasswordHash.ToLower() == hash.ToLower());
-            if (user == null)
-            {
-                MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+           User user = await model.Users
+               .SingleOrDefaultAsync(x =>
+                   x.Login.ToLower() == Login.ToLower()
+                   && x.PasswordHash.ToLower() == hash.ToLower());
+           if (user == null)
+           {
+               MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK, MessageBoxImage.Error);
+               return;
+           }
 
-            sessionService.CurrentLoggedInUser = user;
-            pageService.NavigateCommand.Execute(new TabsView());
-        }, () => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password));
+           sessionService.UserId = user.Id;
+           Application.Current.Dispatcher.Invoke(() => pageService.NavigateCommand.Execute(new ChooseSessionPage()));
+
+       }, () => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password));
     }
 }

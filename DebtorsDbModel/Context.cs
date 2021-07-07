@@ -23,8 +23,6 @@ namespace DebtorsDbModel
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
-            //optionsBuilder.UseInMemoryDatabase("Test");
             optionsBuilder.UseSqlite(@"Data Source=./debtors.db");
             base.OnConfiguring(optionsBuilder);
         }
@@ -46,6 +44,17 @@ namespace DebtorsDbModel
                 .UsingEntity(j => j.ToTable("Roles_Objects"));
 
             modelBuilder
+                .Entity<UserRole>()
+                .HasMany(p => p.UsedInSessions)
+                .WithMany(p => p.Roles)
+                .UsingEntity(j => j.ToTable("Roles_Sessions"));
+
+            modelBuilder
+                .Entity<User>()
+                .HasMany(x => x.Sessions)
+                .WithOne(x => x.User);
+
+            modelBuilder
                 .Entity<Debtor>()
                 .HasMany(x => x.Payments)
                 .WithOne(x => x.Debtor);
@@ -60,6 +69,7 @@ namespace DebtorsDbModel
         public virtual DbSet<DebtorPayment> DebtorPayments { get; set; }
         public virtual DbSet<SecurityObject> SecurityObjects { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<UserSession> Sessions { get; set; }
 
         public static void CreateTestData(Context model)
         {
@@ -70,6 +80,13 @@ namespace DebtorsDbModel
                 Login = "admin",
                 PasswordHash = User.GetHashedString("admin"),
                 FullName = "Администратор",
+                Sessions =
+                {
+                    new()
+                    {
+                        StartDate=DateTime.Now
+                    }
+                }
             });
             model.Users.Add(new()
             {

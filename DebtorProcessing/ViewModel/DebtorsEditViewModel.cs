@@ -45,7 +45,7 @@ namespace DebtorProcessing.ViewModel
                 GoBack();
             },
             () => session.CanEditNotOwnedDebtorsData ||
-                  Debtor.Responsible != null && Debtor.Responsible.Id == session.CurrentLoggedInUser.Id);
+                  Debtor.Responsible != null && Debtor.Responsible.Id == session.UserId);
 
         public DelegateCommand AddPayment => addPayment ??= new(() =>
         {

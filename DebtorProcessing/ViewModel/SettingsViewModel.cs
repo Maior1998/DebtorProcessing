@@ -26,7 +26,7 @@ namespace DebtorProcessing.ViewModel
             if (!changePasswordWindow.ShowDialog().Value) return;
             string newPass = changePasswordWindow.NewPassword;
             Context db = new();
-            User user = db.Users.Single(x => x.Id == Session.CurrentLoggedInUser.Id);
+            User user = db.Users.Single(x => x.Id == Session.UserId);
             user.PasswordHash = User.GetHashedString(newPass);
             db.SaveChanges();
             MessageBox.Show("Ваш пароль успешно изменен", "Изменение пароля", MessageBoxButton.OK,

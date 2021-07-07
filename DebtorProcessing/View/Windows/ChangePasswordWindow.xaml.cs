@@ -38,7 +38,7 @@ namespace DebtorProcessing.View.Windows
             viewModel.ConfirmPassword = ((PasswordBox) sender).Password;
         }
 
-        private void ChangePasswordWindow_OnClosed(object? sender, EventArgs e)
+        private void ChangePasswordWindow_OnClosed(object sender, EventArgs e)
         {
             viewModel.OnSaved -= ViewModel_OnSaved;
         }

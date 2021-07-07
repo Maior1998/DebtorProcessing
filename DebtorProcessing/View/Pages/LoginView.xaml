@@ -27,6 +27,7 @@
                 <PasswordBox
                     MaxLength="20"
                     PasswordChanged="PasswordBox_OnPasswordChanged"
+                    
                     materialDesign:HintAssist.Hint="Пароль"
                     DockPanel.Dock="Top"
                     Margin="10" />

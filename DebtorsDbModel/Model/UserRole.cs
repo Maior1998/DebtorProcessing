@@ -32,5 +32,12 @@ namespace DebtorsDbModel.Model
         /// </summary>
         public ICollection<SecurityObject> Objects { get; set; } = new List<SecurityObject>();
 
+        public ICollection<UserSession> UsedInSessions { get; set; } = new List<UserSession>();
+
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

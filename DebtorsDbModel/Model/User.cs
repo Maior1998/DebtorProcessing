@@ -36,6 +36,13 @@ namespace DebtorsDbModel.Model
         [Required]
         public string PasswordHash { get; set; }
 
+        /// <summary>
+        /// Коллекция всех сессий данного пользователя.
+        /// </summary>
+        public ICollection<UserSession> Sessions { get; set; } = new List<UserSession>();
+
+
+
         private const string Salt = "X#c=ZkgR/aS4_HZ(HfEH(6.nqyd=Q-qkxbn!ffR=V=xiD8aq#4";
 
         private static string GetSaltedString([NotNull] string source)

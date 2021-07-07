@@ -11,6 +11,16 @@
       Background="White"
       Title="TabsView">
     <DockPanel>
+        <Menu 
+            DockPanel.Dock="Top" 
+            Height="40"
+            >
+            <MenuItem 
+                Padding="0" 
+                Header="Выход"
+                Command="{Binding Exit}"
+                />
+        </Menu>
         <TabControl>
             <TabItem Header="Список должников">
                 <Frame>

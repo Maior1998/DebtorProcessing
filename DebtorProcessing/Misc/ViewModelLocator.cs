@@ -1,10 +1,12 @@
 ﻿using DebtorProcessing.ViewModel;
+
 using ReactiveUI;
 
 namespace DebtorProcessing.Misc
 {
     public class ViewModelLocator : ReactiveObject
     {
+        public ChooseSessionViewModel ChooseSessionViewModel => App.Resolve<ChooseSessionViewModel>();
         public EditRoleWindowViewModel EditRoleWindowViewModel => App.Resolve<EditRoleWindowViewModel>();
 
         public ChooseRoleObjectAccessWindowViewModel ChooseRoleObjectAccessWindowViewModel =>

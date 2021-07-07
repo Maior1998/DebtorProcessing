@@ -7,19 +7,18 @@ namespace DebtorProcessing.Services
     public class SessionService
     {
         private Guid[] accessesObjects;
+        public Guid UserId;
 
-        private User currentLoggedInUser;
+        private UserSession userSession;
 
-        /// <summary>
-        ///     Текущий залогиненный в систему пользователь.
-        /// </summary>
-        public User CurrentLoggedInUser
+        public UserSession UserSession
         {
-            get => currentLoggedInUser;
+            get => userSession;
             set
             {
-                currentLoggedInUser = value;
-                accessesObjects = CurrentLoggedInUser.UserRoles.Aggregate(Enumerable.Empty<Guid>(),
+                userSession = value;
+                if (userSession == null) return;
+                accessesObjects = userSession.User.UserRoles.Aggregate(Enumerable.Empty<Guid>(),
                     (current, nextRole) => current.Union(nextRole.Objects.Select(x => x.Id))).ToArray();
                 HasAccessToAdminPanel = CheckRight("Доступ к панели администрирования");
                 CanEditNotOwnedDebtorsData =
@@ -30,6 +29,7 @@ namespace DebtorProcessing.Services
                 CanUserChangeTheirPassword = CheckRight("Может изменять свой пароль");
             }
         }
+
 
         public bool CanEditDebtorsTable { get; private set; }
         public bool HasAccessToAdminPanel { get; private set; }

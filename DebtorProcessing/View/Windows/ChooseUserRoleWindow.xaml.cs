@@ -35,7 +35,7 @@ namespace DebtorProcessing.View
             Close();
         }
 
-        private void ChooseUserRoleWindow_OnClosed(object? sender, EventArgs e)
+        private void ChooseUserRoleWindow_OnClosed(object sender, EventArgs e)
         {
             viewModel.OnSaved -= ViewModel_OnSaved;
         }

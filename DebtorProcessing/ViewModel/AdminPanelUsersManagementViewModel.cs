@@ -55,7 +55,7 @@ namespace DebtorProcessing.ViewModel
             db.SaveChanges();
             Users.Remove(SelectedUser);
             OnUsersChanged?.Invoke();
-        }, () => SelectedUser != null && SelectedUser.Id != session.CurrentLoggedInUser.Id);
+        }, () => SelectedUser != null && SelectedUser.Id != session.UserId);
 
         public DelegateCommand AddUser => addUser ??= new(() =>
         {
@@ -120,7 +120,7 @@ namespace DebtorProcessing.ViewModel
             OnUserRolesChanged?.Invoke();
         }, () =>
             SelectedUser != null
-            && SelectedUser.Id != session.CurrentLoggedInUser.Id
+            && SelectedUser.Id != session.UserId
             && availiableRolesToUse.Except(SelectedUser.UserRoles.Select(x => x.Id)).Any());
 
         public DelegateCommand RevokeRoleFromUser => revokeRoleFromUser ??= new(() =>
@@ -148,7 +148,7 @@ namespace DebtorProcessing.ViewModel
         {
             Context context = new();
 
-            Users = context.Users.Include(x => x.UserRoles).Where(x => x.Id != session.CurrentLoggedInUser.Id)
+            Users = context.Users.Include(x => x.UserRoles).Where(x => x.Id != session.UserId)
                 .ToList();
         }
 

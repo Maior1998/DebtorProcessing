@@ -41,7 +41,7 @@ namespace DebtorProcessing.ViewModel
         {
             Context context = new();
             Debtor addingDebtor = DatabaseHelperFunctions.GetExampleDebtor();
-            User currentLoggedInUser = context.Users.Single(x => x.Id == session.CurrentLoggedInUser.Id);
+            User currentLoggedInUser = context.Users.Single(x => x.Id == session.UserId);
             currentLoggedInUser.Debtors.Add(addingDebtor);
 
             context.Debtors.Add(addingDebtor);
@@ -110,7 +110,7 @@ namespace DebtorProcessing.ViewModel
         private IQueryable<Debtor> SetUserFilter(IQueryable<Debtor> source)
         {
             if (!session.CanViewNotOwnedDebtors)
-                return source.Where(x => x.Responsible.Id == session.CurrentLoggedInUser.Id);
+                return source.Where(x => x.Responsible.Id == session.UserId);
             return source;
         }
 

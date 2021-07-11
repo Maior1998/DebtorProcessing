@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpressMvvm" Version="20.2.3" />
+    <PackageReference Include="EPPlus" Version="5.7.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.2.0-ci2603" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0-preview.5.21301.9" />
+    <PackageReference Include="ReactiveUI" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="14.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DebtorsDbModel\DebtorsProcessing.DatabaseModel.csproj" />
+  </ItemGroup>
+
+</Project>

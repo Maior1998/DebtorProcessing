@@ -1,4 +1,5 @@
-﻿using DebtorsDbModel.Model;
+﻿
+using DebtorsProcessing.DatabaseModel.Entities;
 
 using System;
 using System.Collections.Generic;

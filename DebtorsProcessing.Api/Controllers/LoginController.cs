@@ -1,9 +1,9 @@
-﻿using DebtorsDbModel.Model;
-
+﻿
 using DebtorsProcessing.Api.Configuration;
 using DebtorsProcessing.Api.Model;
 using DebtorsProcessing.Api.Model.Dtos.Responses;
 using DebtorsProcessing.Api.Repositories;
+using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -70,8 +70,8 @@ namespace DebtorsProcessing.Api.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(nameof(DebtorsDbModel.Model.User.Id),user.Id.ToString()),
-                    new Claim(nameof(DebtorsDbModel.Model.User.Login), user.Login),
+                    new Claim(nameof(DatabaseModel.Entities.User.Id),user.Id.ToString()),
+                    new Claim(nameof(DatabaseModel.Entities.User.Login), user.Login),
                     new Claim(JwtRegisteredClaimNames.AuthTime, DateTime.Now.ToShortDateString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 }),

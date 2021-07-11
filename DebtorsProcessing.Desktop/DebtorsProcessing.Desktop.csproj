@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DebtorsDbModel\DebtorsProcessing.DatabaseModel.csproj" />
+    <ProjectReference Include="..\DebtorsProcessing.DatabaseModel\DebtorsProcessing.DatabaseModel.csproj" />
   </ItemGroup>
 
 </Project>

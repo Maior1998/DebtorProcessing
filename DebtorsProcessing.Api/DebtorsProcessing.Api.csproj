@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DebtorsDbModel\DebtorsProcessing.DatabaseModel.csproj" />
+    <Folder Include="Model\Dtos\Requests\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Dtos\Requests\" />
+    <ProjectReference Include="..\DebtorsProcessing.DatabaseModel\DebtorsProcessing.DatabaseModel.csproj" />
   </ItemGroup>
 
 </Project>

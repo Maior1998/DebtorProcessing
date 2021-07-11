@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using DebtorsProcessing.DatabaseModel.Entities;
+﻿using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DebtorsProcessing.DatabaseModel
 {

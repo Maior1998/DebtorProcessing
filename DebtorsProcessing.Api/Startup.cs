@@ -1,6 +1,7 @@
 using DebtorsProcessing.Api.Configuration;
 using DebtorsProcessing.Api.Model;
 using DebtorsProcessing.Api.Repositories;
+using DebtorsProcessing.DatabaseModel;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -36,8 +37,7 @@ namespace DebtorsProcessing.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<DebtorsDbModel.DebtorsContext>();
-            services.AddSingleton<IDebtorsRepository,DebtorsProcessing.Api.>
+            services.AddSingleton<IDebtorsRepository, TestRepository>();
 
 
             services.AddControllers();
@@ -120,7 +120,7 @@ namespace DebtorsProcessing.Api
 
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<DebtorsDbModel.DebtorsContext>();
+                .AddEntityFrameworkStores<DebtorsContext>();
         }
     }
 }

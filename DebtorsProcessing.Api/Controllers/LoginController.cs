@@ -1,8 +1,11 @@
 ﻿
 using DebtorsProcessing.Api.Configuration;
 using DebtorsProcessing.Api.Model;
+using DebtorsProcessing.Api.Model.Dtos.Requests;
 using DebtorsProcessing.Api.Model.Dtos.Responses;
 using DebtorsProcessing.Api.Repositories;
+using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
+using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +26,8 @@ namespace DebtorsProcessing.Api.Controllers
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-
-        private readonly IDebtorsRepository repository;
+        private readonly IUsersRepository usersRepository;
+        private readonly IRefreshTokensRepository refreshTokensRepository;
         /// <summary>
         /// Настройки обработки JWToken'ов. Заполнятся Service Controller'ом
         /// </summary>
@@ -40,22 +43,41 @@ namespace DebtorsProcessing.Api.Controllers
         /// <param name="optionsMonitor">Монитор настроек <see cref="JwtConfig"/>.</param>
         /// <param name="loginTokenValidationParameters">Параметры валидации токена JWT, которые будут использоваться при создании новых токенов JWT.</param>
         public LoginController(
-            IDebtorsRepository repository,
+            IUsersRepository usersRepository,
+            IRefreshTokensRepository refreshTokensRepository,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             LoginTokenValidationParameters loginTokenValidationParameters)
         {
             this.loginTokenValidationParameters = loginTokenValidationParameters;
             jwtConfig = optionsMonitor.CurrentValue;
+            this.usersRepository = usersRepository;
+            this.refreshTokensRepository = refreshTokensRepository;
         }
 
         [HttpPost]
         [Route(nameof(Login))]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            return Ok();
+            if (!ModelState.IsValid) return BadRequest("Invalid payload");
+            User user = await usersRepository.FindUserByLogin(request.Login);
+            const string errorString = "User does not exist or password is wrong";
+            if (user == null) return BadRequest(new LoginResponse()
+            {
+                Success = false,
+                Errors = { errorString }
+            });
+            if (!user.CheckPass(request.Password))
+                return BadRequest(new LoginResponse()
+                {
+                    Success = false,
+                    Errors = new() { errorString }
+                });
+            AuthResult result = await GenerateLoginJwt(user);
+            return Ok(result);
+
         }
 
-        
+
 
         /// <summary>
         /// Производит генерацию и сохранение нового токена для пользователя.
@@ -94,13 +116,14 @@ namespace DebtorsProcessing.Api.Controllers
                 Token = $"{Guid.NewGuid()}-{Guid.NewGuid()}"
             };
 
-            await repository.AddRefreshTokenAsync(refreshToken);
+            await refreshTokensRepository.AddRefreshTokenAsync(refreshToken);
 
             return new AuthResult()
             {
                 Success = true,
                 Token = jwtToken,
-                RefreshToken = refreshToken.Token
+                RefreshToken = refreshToken.Token,
+                FullName = user.FullName
             };
         }
     }

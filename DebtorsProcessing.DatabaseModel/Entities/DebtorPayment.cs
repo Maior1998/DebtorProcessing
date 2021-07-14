@@ -20,9 +20,13 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// Дата проведения этого платежа.
         /// </summary>
         public DateTime Date { get; set; } = DateTime.Now;
+
+
+        [Required]
+        public Guid? DebtorId { get; set; }
         /// <summary>
         /// Должник, по которому выполнен данный платеж. Является обязательным в БД.
         /// </summary>
-        [Required] public Debtor Debtor { get; set; }
+        public Debtor Debtor { get; set; }
     }
 }

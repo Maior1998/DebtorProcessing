@@ -7,19 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0-preview.5.21301.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.5.21301.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.5.21301.17" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0-preview.5.21301.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0-preview.5.21301.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0-preview.6.21355.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\Dtos\Requests\" />
   </ItemGroup>
 
   <ItemGroup>

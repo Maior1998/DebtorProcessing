@@ -14,6 +14,9 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// </summary>
         public Guid Id { get; set; }
 
+
+        public Guid? ResponsibleId { get; set; }
+
         /// <summary>
         /// Ответственный за данного должника сотрудник.
         /// </summary>

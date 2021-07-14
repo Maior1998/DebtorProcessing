@@ -17,6 +17,18 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         {
             PasswordHash = GetHashedString(newPassword);
         }
+
+        /// <summary>
+        /// Выполняет проверку пароля пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь, пароль которого необходимо проверить.</param>
+        /// <param name="pass">Пароль, который необходимо проверить.</param>
+        /// <returns>Результат проверки пароля.</returns>
+        public bool CheckPass(string pass)
+        {
+            string hash = GetHashedString(Salt, pass);
+            return hash == PasswordHash;
+        }
         private const int SALT_LENGTH = 32;
         private static Random random = new();
         public static string RandomString(int length)

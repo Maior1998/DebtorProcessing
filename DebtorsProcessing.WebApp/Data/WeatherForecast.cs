@@ -1,6 +1,6 @@
 using System;
 
-namespace DebtorsProcessing.Api
+namespace DebtorsProcessing.WebApp.Data
 {
     public class WeatherForecast
     {

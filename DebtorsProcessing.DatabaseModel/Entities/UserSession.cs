@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
@@ -23,6 +24,8 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// </summary>
         public DateTime? EndDate { get; set; }
 
+        [Required]
+        public Guid? UserId { get; set; }
         /// <summary>
         /// Пользователь, вошедший в систему (открывший сеанс).
         /// </summary>

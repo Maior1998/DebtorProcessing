@@ -36,7 +36,7 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// <summary>
         /// Id пользователя, запросившего токен.
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         /// <summary>
         /// Пользователь, запросивший токен.
         /// </summary>

@@ -57,11 +57,18 @@ namespace DebtorsProcessing.DatabaseModel
             modelBuilder
                 .Entity<Debtor>()
                 .HasMany(x => x.Payments)
-                .WithOne(x => x.Debtor);
+                .WithOne(x => x.Debtor)
+                .HasForeignKey(x => x.DebtorId);
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Debtors)
-                .WithOne(x => x.Responsible);
+                .WithOne(x => x.Responsible)
+                .HasForeignKey(x => x.ResponsibleId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Sessions)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
         }
 
         public virtual DbSet<LoginRefreshToken> LoginRefreshTokens { get; set; }

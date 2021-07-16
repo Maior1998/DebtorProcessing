@@ -24,7 +24,7 @@ namespace DebtorsProcessing.Api.Repositories.UsersRepositories
             return context.Users.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IQueryable<User>> GetAllEntities()
+        public IQueryable<User> GetAllEntities()
         {
             return new DebtorsContext().Users;
         }
@@ -52,6 +52,11 @@ namespace DebtorsProcessing.Api.Repositories.UsersRepositories
         public Task UpdateEntity(User entity)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<User> GetEntity(Guid id)
+        {
+            return new DebtorsContext().Users.Where(x => x.Id == id);
         }
     }
 }

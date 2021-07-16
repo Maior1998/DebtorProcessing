@@ -29,7 +29,7 @@ namespace DebtorsProcessing.Api.Repositories.SessionsRepositories
             return await context.Sessions.Where(x => x.User.Id == userId && x.EndDate == null).ToArrayAsync();
         }
 
-        public async Task<IQueryable<UserSession>> GetAllEntities()
+        public IQueryable<UserSession> GetAllEntities()
         {
             return new DebtorsContext().Sessions;
         }
@@ -57,6 +57,12 @@ namespace DebtorsProcessing.Api.Repositories.SessionsRepositories
         public Task UpdateEntity(UserSession entity)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<UserSession> GetEntity(Guid id)
+        {
+            DebtorsContext context = new();
+            return context.Sessions.Where(x => x.Id == id);
         }
     }
 }

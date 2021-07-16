@@ -1,7 +1,7 @@
 using DebtorsProcessing.Api.Configuration;
+using DebtorsProcessing.Api.Helpers;
 using DebtorsProcessing.Api.Middleware;
 using DebtorsProcessing.Api.Model;
-using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.DebtorsRepositories;
 using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
 using DebtorsProcessing.Api.Repositories.RolesRepositories;
@@ -10,27 +10,20 @@ using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel;
 using DebtorsProcessing.DatabaseModel.Entities;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api
 {
@@ -66,13 +59,15 @@ namespace DebtorsProcessing.Api
             services
                 .AddControllers()
                 .AddOData(opt =>
-                opt.AddRouteComponents("odata", GetEdmModel())
-                .EnableQueryFeatures().SetMaxTop(5))
-                ;
+                {
+                    opt.AddRouteComponents("odata", GetEdmModel()).EnableQueryFeatures(5);
+                    opt.RouteOptions.EnableKeyInParenthesis = true;
+                    opt.RouteOptions.EnableKeyAsSegment = true;
+                });
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DebtorsProcessing.Api", Version = "v1" });
-            });
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DebtorsProcessing.Api", Version = "v1" });
+                });
         }
 
         private void ConfigureSwagger(IServiceCollection services)
@@ -167,6 +162,8 @@ namespace DebtorsProcessing.Api
             {
                 endpoints.MapControllers();
             });
+
+            StartInitHelper.Reset();
         }
 
 

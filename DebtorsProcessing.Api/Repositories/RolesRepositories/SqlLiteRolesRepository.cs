@@ -24,7 +24,7 @@ namespace DebtorsProcessing.Api.Repositories.RolesRepositories
             return await context.UserRoles.Where(x => x.UsedInSessions.Any(x => x.Id == sessionId)).ToArrayAsync();
         }
 
-        public async Task<IQueryable<UserRole>> GetAllEntities()
+        public IQueryable<UserRole> GetAllEntities()
         {
             return new DebtorsContext().UserRoles;
         }
@@ -52,6 +52,12 @@ namespace DebtorsProcessing.Api.Repositories.RolesRepositories
         public Task UpdateEntity(UserRole entity)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<UserRole> GetEntity(Guid id)
+        {
+            DebtorsContext context = new();
+            return context.UserRoles.Where(x => x.Id == id);
         }
     }
 }

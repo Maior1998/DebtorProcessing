@@ -27,9 +27,15 @@ namespace DebtorsProcessing.Api.Repositories.DebtorsRepositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<Debtor>> GetAllEntities()
+        public IQueryable<Debtor> GetAllEntities()
         {
             return new DebtorsContext().Debtors;
+        }
+
+        public IQueryable<Debtor> GetEntity(Guid id)
+        {
+            DebtorsContext context = new();
+            return context.Debtors.Where(x => x.Id == id);
         }
 
         public async Task<Debtor> GetEntityById(Guid id)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using System;
@@ -23,9 +24,15 @@ namespace DebtorsProcessing.Api.Controllers
         }
 
         [EnableQuery]
-        public async Task<IQueryable<T>> Get()
+        public IQueryable<T> Get()
         {
-            return await repository.GetAllEntities();
+            return repository.GetAllEntities();
+        }
+
+        [EnableQuery]
+        public SingleResult<T> Get(Guid key)
+        {
+            return SingleResult.Create(repository.GetEntity(key));
         }
 
         public async Task<IActionResult> Post(T entity)

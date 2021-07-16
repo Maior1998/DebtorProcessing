@@ -36,7 +36,8 @@ namespace DebtorsProcessing.Api.Helpers
             context.Debtors.Add(new()
             {
                 ContractNumber = "123456789",
-                StartDebt = 100
+                StartDebt = 100,
+                ResponsibleId = addingUser.Id
             });
             context.Debtors.Add(new()
             {

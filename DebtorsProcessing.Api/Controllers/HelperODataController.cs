@@ -30,7 +30,7 @@ namespace DebtorsProcessing.Api.Controllers
         [EnableQuery]
         public IQueryable<T> Get()
         {
-            return repository.GetAllEntities();
+            return repository.GetAllEntities().Where(securityManager.CollectionSecurityFilter);
         }
 
         [EnableQuery]

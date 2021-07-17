@@ -69,6 +69,16 @@ namespace DebtorsProcessing.DatabaseModel
                 .HasMany(x => x.Sessions)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.SecurityJournalEvents)
+                .WithOne(x => x.RelatedUser)
+                .HasForeignKey(x => x.RelatedUserId);
+
+            modelBuilder.Entity<SecurityJournalEventType>()
+                .HasMany(x => x.Events)
+                .WithOne(x => x.Type)
+                .HasForeignKey(x => x.TypeId);
         }
 
         public virtual DbSet<LoginRefreshToken> LoginRefreshTokens { get; set; }
@@ -79,7 +89,8 @@ namespace DebtorsProcessing.DatabaseModel
         public virtual DbSet<SecurityObject> SecurityObjects { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<UserSession> Sessions { get; set; }
-
+        public virtual DbSet<SecurityJournalEvent> SecurityJournalEvents { get; set; }
+        public virtual DbSet<SecurityJournalEventType> SecurityJournalEventTypes { get; set; }
         public static void CreateTestData(DebtorsContext model)
         {
             model.Database.EnsureDeleted();

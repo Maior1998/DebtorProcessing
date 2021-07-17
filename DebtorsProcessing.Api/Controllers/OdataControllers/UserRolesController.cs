@@ -1,4 +1,5 @@
-﻿using DebtorsProcessing.Api.Repositories.RolesRepositories;
+﻿using DebtorsProcessing.Api.EntitySecurityManagers.UserRolesSecurityManagers;
+using DebtorsProcessing.Api.Repositories.RolesRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.AspNetCore.Components;
@@ -12,6 +13,9 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
 {
     public class UserRolesController : HelperODataController<UserRole>
     {
-        public UserRolesController(IRolesRepository repository) : base(repository) { }
+        public UserRolesController(
+            IRolesRepository repository, 
+            IUserRolesSecurityManager securityManager) 
+            : base(repository, securityManager) { }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DebtorsProcessing.Api.Repositories.UsersRepositories;
+﻿using DebtorsProcessing.Api.EntitySecurityManagers.UsersSecurityManagers;
+using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
     {
 
 
-        public UsersController(IUsersRepository usersRepository) : base(usersRepository)
+        public UsersController(IUsersRepository usersRepository, IUsersSecurityManager securityManager) : base(usersRepository, securityManager)
         {
         }
 

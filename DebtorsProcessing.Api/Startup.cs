@@ -1,10 +1,15 @@
 using DebtorsProcessing.Api.Configuration;
+using DebtorsProcessing.Api.EntitySecurityManagers.DebtorsSecurityManagers;
+using DebtorsProcessing.Api.EntitySecurityManagers.SecurityJournalEventsSecurityManager;
+using DebtorsProcessing.Api.EntitySecurityManagers.UserRolesSecurityManagers;
+using DebtorsProcessing.Api.EntitySecurityManagers.UserSessionsSecurityManagers;
 using DebtorsProcessing.Api.Helpers;
 using DebtorsProcessing.Api.Middleware;
 using DebtorsProcessing.Api.Model;
 using DebtorsProcessing.Api.Repositories.DebtorsRepositories;
 using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
 using DebtorsProcessing.Api.Repositories.RolesRepositories;
+using DebtorsProcessing.Api.Repositories.SecurityJournalEventsRepositories;
 using DebtorsProcessing.Api.Repositories.SessionsRepositories;
 using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel;
@@ -36,13 +41,22 @@ namespace DebtorsProcessing.Api
 
         public IConfiguration Configuration { get; }
 
-        private void AddRepositories(IServiceCollection services)
+        private static void AddRepositories(IServiceCollection services)
         {
             services.AddSingleton<IDebtorsRepository, SqlLiteDebtorsRepository>();
             services.AddSingleton<IRefreshTokensRepository, SqlLiteRefreshTokensRepository>();
             services.AddSingleton<IRolesRepository, SqlLiteRolesRepository>();
             services.AddSingleton<ISessionsRepository, SqlLiteSessionsRepository>();
             services.AddSingleton<IUsersRepository, SqlLiteUsersRepository>();
+            services.AddSingleton<ISecurityJournalEventsRepository, SqlLiteSecurityJournalEventsRepository>();
+        }
+
+        private static void AddSecurityManagers(IServiceCollection services)
+        {
+            services.AddSingleton<IDebtorsSecurityManager, RoleBasedDebtorSecurityManager>();
+            services.AddSingleton<IUserRolesSecurityManager, RoleBasedUserRolesSecurityManager>();
+            services.AddSingleton<IUserSessionSecurityManager, RoleBasedUserSessionsSecurityManager>();
+            services.AddSingleton<ISecurityJournalEventsSecurityManager, RoleBasedSecurityJournalEventsSecurityManager>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -51,7 +65,7 @@ namespace DebtorsProcessing.Api
 
             services.Configure<JwtConfig>(Configuration.GetSection(nameof(JwtConfig)));
             AddRepositories(services);
-
+            AddSecurityManagers(services);
 
             services.AddDbContext<DebtorsContext>();
             AddTokenValidationParams(services);
@@ -70,7 +84,7 @@ namespace DebtorsProcessing.Api
                 });
         }
 
-        private void ConfigureSwagger(IServiceCollection services)
+        private static void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -115,7 +129,7 @@ namespace DebtorsProcessing.Api
 
         private static IEdmModel GetEdmModel()
         {
-            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            ODataConventionModelBuilder builder = new();
             var usersEntitySet = builder.EntitySet<User>("Users");
             usersEntitySet.EntityType.Ignore(x => x.PasswordHash);
             usersEntitySet.EntityType.Ignore(x => x.Salt);
@@ -133,6 +147,8 @@ namespace DebtorsProcessing.Api
             var debtorPaymentsSet = builder.EntitySet<DebtorPayment>("DebtorPayments");
             debtorPaymentsSet.EntityType.Ignore(x => x.Debtor);
             builder.EntitySet<SecurityObject>("SecurityObjects");
+            builder.EntitySet<SecurityJournalEvent>("SecurityJournalEvents");
+            builder.EntitySet<SecurityJournalEventType>("SecurityJournalEventTypes");
             return builder.GetEdmModel();
         }
 

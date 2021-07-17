@@ -122,5 +122,7 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
         public ICollection<LoginRefreshToken> LoginRefreshTokens { get; set; } = new List<LoginRefreshToken>();
+
+        public ICollection<SecurityJournalEvent> SecurityJournalEvents { get; set; } = new List<SecurityJournalEvent>();
     }
 }

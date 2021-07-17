@@ -1,4 +1,5 @@
-﻿using DebtorsProcessing.Api.Repositories;
+﻿using DebtorsProcessing.Api.EntitySecurityManagers;
+using DebtorsProcessing.Api.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
@@ -16,11 +17,14 @@ namespace DebtorsProcessing.Api.Controllers
 {
     public abstract class HelperODataController<T> : ODataController where T : class
     {
-        public IOdataEntityRepository<T> repository { get; protected set; }
-
-        protected HelperODataController(IOdataEntityRepository<T> repository)
+        public IOdataEntityRepository<T> repository { get; }
+        private IEntitySecurityManager<T> securityManager { get; }
+        protected HelperODataController(
+            IOdataEntityRepository<T> repository,
+            IEntitySecurityManager<T> securityManager)
         {
             this.repository = repository;
+            this.securityManager = securityManager;
         }
 
         [EnableQuery]

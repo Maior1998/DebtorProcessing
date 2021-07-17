@@ -1,4 +1,5 @@
 ﻿using DebtorsProcessing.Api.Attributes;
+using DebtorsProcessing.Api.EntitySecurityManagers.DebtorsSecurityManagers;
 using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.DebtorsRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
@@ -19,7 +20,10 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
 
     public class DebtorsController : HelperODataController<Debtor>
     {
-        public DebtorsController(IDebtorsRepository debtorsRepository) : base(debtorsRepository) { }
+        public DebtorsController(
+            IDebtorsRepository debtorsRepository,
+            IDebtorsSecurityManager debtorsSecurityManager) 
+            : base(debtorsRepository, debtorsSecurityManager) { }
 
 
     }

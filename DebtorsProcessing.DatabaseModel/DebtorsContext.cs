@@ -93,6 +93,7 @@ namespace DebtorsProcessing.DatabaseModel
         public virtual DbSet<SecurityJournalEventType> SecurityJournalEventTypes { get; set; }
         public static void CreateTestData(DebtorsContext model)
         {
+            if (model.Debtors.Any()) return;
             model.Database.EnsureDeleted();
             model.Database.EnsureCreated();
             User bufferUser = new()

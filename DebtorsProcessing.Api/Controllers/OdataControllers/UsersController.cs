@@ -2,6 +2,7 @@
 using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Formatter;
@@ -19,7 +20,11 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
     {
 
 
-        public UsersController(IUsersRepository usersRepository, IUsersSecurityManager securityManager) : base(usersRepository, securityManager)
+        public UsersController(
+            IUsersRepository usersRepository,
+            IUsersSecurityManager securityManager,
+            IHttpContextAccessor httpContextAccessor)
+            : base(usersRepository, securityManager, httpContextAccessor)
         {
         }
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DebtorsProcessing.Api
+namespace DebtorsProcessing.Api.Helpers
 {
     public static class DebtorsModelExtensions
     {

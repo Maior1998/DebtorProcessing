@@ -1,6 +1,8 @@
-﻿using DebtorsProcessing.Api.EntitySecurityManagers;
+﻿using DebtorsProcessing.Api.Attributes;
+using DebtorsProcessing.Api.EntitySecurityManagers;
 using DebtorsProcessing.Api.Repositories;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Formatter;
@@ -15,16 +17,20 @@ using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Controllers
 {
+    [RequiresLoginAuthorize]
     public abstract class HelperODataController<T> : ODataController where T : class
     {
         public IOdataEntityRepository<T> repository { get; }
         private IEntitySecurityManager<T> securityManager { get; }
+        private IHttpContextAccessor httpContextAccessor { get; set; }
         protected HelperODataController(
             IOdataEntityRepository<T> repository,
-            IEntitySecurityManager<T> securityManager)
+            IEntitySecurityManager<T> securityManager,
+            IHttpContextAccessor httpContextAccessor) : base()
         {
             this.repository = repository;
             this.securityManager = securityManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [EnableQuery]
@@ -36,7 +42,7 @@ namespace DebtorsProcessing.Api.Controllers
         [EnableQuery]
         public SingleResult<T> Get(Guid key)
         {
-            return SingleResult.Create(repository.GetEntity(key));
+            return SingleResult.Create(repository.GetEntity(key).Where(securityManager.CollectionSecurityFilter));
         }
 
         public async Task<IActionResult> Post(T entity)
@@ -45,7 +51,7 @@ namespace DebtorsProcessing.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await repository.AddEntity(entity);
+                await repository.AddEntity(entity);
             return Created(entity);
         }
 

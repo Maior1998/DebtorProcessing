@@ -10,6 +10,7 @@ using DebtorsProcessing.Api.Repositories.DebtorsRepositories;
 using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
 using DebtorsProcessing.Api.Repositories.RolesRepositories;
 using DebtorsProcessing.Api.Repositories.SecurityJournalEventsRepositories;
+using DebtorsProcessing.Api.Repositories.SecurityObjectRepositories;
 using DebtorsProcessing.Api.Repositories.SessionsRepositories;
 using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using DebtorsProcessing.DatabaseModel;
@@ -49,6 +50,7 @@ namespace DebtorsProcessing.Api
             services.AddSingleton<ISessionsRepository, SqlLiteSessionsRepository>();
             services.AddSingleton<IUsersRepository, SqlLiteUsersRepository>();
             services.AddSingleton<ISecurityJournalEventsRepository, SqlLiteSecurityJournalEventsRepository>();
+            services.AddSingleton<ISecurityObjectsRepository, SqlLiteSecurityObjectsRepository>();
         }
 
         private static void AddSecurityManagers(IServiceCollection services)
@@ -67,6 +69,7 @@ namespace DebtorsProcessing.Api
             AddRepositories(services);
             AddSecurityManagers(services);
 
+            services.AddHttpContextAccessor();
             services.AddDbContext<DebtorsContext>();
             AddTokenValidationParams(services);
             ConfigureSwagger(services);
@@ -80,7 +83,11 @@ namespace DebtorsProcessing.Api
                 });
             services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DebtorsProcessing.Api", Version = "v1" });
+                    c.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Title = "DebtorsProcessing.Api",
+                        Version = "v1"
+                    });
                 });
         }
 
@@ -130,21 +137,21 @@ namespace DebtorsProcessing.Api
         private static IEdmModel GetEdmModel()
         {
             ODataConventionModelBuilder builder = new();
-            var usersEntitySet = builder.EntitySet<User>("Users");
+            EntitySetConfiguration<User> usersEntitySet = builder.EntitySet<User>("Users");
             usersEntitySet.EntityType.Ignore(x => x.PasswordHash);
             usersEntitySet.EntityType.Ignore(x => x.Salt);
             usersEntitySet.EntityType.Ignore(x => x.LoginRefreshTokens);
 
-            var userRolesSet = builder.EntitySet<UserRole>("UserRoles");
+            EntitySetConfiguration<UserRole> userRolesSet = builder.EntitySet<UserRole>("UserRoles");
 
-            var userSessionsSet = builder.EntitySet<UserSession>("UserSessions");
+            EntitySetConfiguration<UserSession> userSessionsSet = builder.EntitySet<UserSession>("UserSessions");
             userSessionsSet.EntityType.Ignore(x => x.User);
             userSessionsSet.EntityType.Ignore(x => x.SessionRefreshTokens);
 
 
-            var debtorsSet = builder.EntitySet<Debtor>("Debtors");
+            EntitySetConfiguration<Debtor> debtorsSet = builder.EntitySet<Debtor>("Debtors");
             debtorsSet.EntityType.Ignore(x => x.Responsible);
-            var debtorPaymentsSet = builder.EntitySet<DebtorPayment>("DebtorPayments");
+            EntitySetConfiguration<DebtorPayment> debtorPaymentsSet = builder.EntitySet<DebtorPayment>("DebtorPayments");
             debtorPaymentsSet.EntityType.Ignore(x => x.Debtor);
             builder.EntitySet<SecurityObject>("SecurityObjects");
             builder.EntitySet<SecurityJournalEvent>("SecurityJournalEvents");

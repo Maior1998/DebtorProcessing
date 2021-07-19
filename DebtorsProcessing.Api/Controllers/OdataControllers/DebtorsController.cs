@@ -4,6 +4,7 @@ using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.DebtorsRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
@@ -22,8 +23,9 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
     {
         public DebtorsController(
             IDebtorsRepository debtorsRepository,
-            IDebtorsSecurityManager debtorsSecurityManager) 
-            : base(debtorsRepository, debtorsSecurityManager) { }
+            IDebtorsSecurityManager debtorsSecurityManager,
+            IHttpContextAccessor httpContextAccessor)
+            : base(debtorsRepository, debtorsSecurityManager, httpContextAccessor) { }
 
 
     }

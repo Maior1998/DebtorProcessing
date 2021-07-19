@@ -21,7 +21,6 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// <summary>
         /// Выполняет проверку пароля пользователя.
         /// </summary>
-        /// <param name="user">Пользователь, пароль которого необходимо проверить.</param>
         /// <param name="pass">Пароль, который необходимо проверить.</param>
         /// <returns>Результат проверки пароля.</returns>
         public bool CheckPass(string pass)

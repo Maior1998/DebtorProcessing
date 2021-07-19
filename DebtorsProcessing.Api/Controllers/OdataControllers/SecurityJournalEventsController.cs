@@ -4,6 +4,8 @@ using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.SecurityJournalEventsRepositories;
 using DebtorsProcessing.DatabaseModel.Entities;
 
+using Microsoft.AspNetCore.Http;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,9 @@ namespace DebtorsProcessing.Api.Controllers.OdataControllers
     {
         public SecurityJournalEventsController(
             ISecurityJournalEventsRepository repository,
-            ISecurityJournalEventsSecurityManager securityManager)
-            : base(repository, securityManager)
+            ISecurityJournalEventsSecurityManager securityManager,
+            IHttpContextAccessor httpContextAccessor)
+            : base(repository, securityManager, httpContextAccessor)
         {
         }
     }

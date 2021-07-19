@@ -11,5 +11,8 @@ namespace DebtorsProcessing.Api.EntitySecurityManagers
     {
 
         public Expression<Func<T, bool>> CollectionSecurityFilter { get; }
+        //public bool CanUserCreateEntity(T creatingEntity);
+        //public bool CanUserUpdateEntity(T updatingEntity);
+        //public bool CanUserDeleteEntity(T deletingEntity);
     }
 }

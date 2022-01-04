@@ -1,17 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+using DebtorsProcessing.DatabaseModel.Abstractions;
+
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет собой платеж по должнику.
     /// </summary>
-    public record DebtorPayment
+    public record DebtorPayment : BaseEntity
     {
-        /// <summary>
-        /// Номер записи в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         /// Сумма этого платежа.
         /// </summary>

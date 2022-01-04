@@ -12,7 +12,7 @@ namespace DebtorsProcessing.Api.Helpers
     {
         public static UserRoleDto ToDto(this UserRole userRole)
         {
-            return new UserRoleDto() { Name = userRole.Name };
+            return new() { Name = userRole.Name };
         }
     }
 }

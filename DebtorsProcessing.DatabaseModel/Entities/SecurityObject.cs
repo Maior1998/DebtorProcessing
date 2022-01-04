@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DebtorsProcessing.DatabaseModel.Abstractions;
+
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет собой объект модели безопасности системы.
     /// </summary>
-    public record SecurityObject
+    public record SecurityObject : BaseLookup
     {
-        /// <summary>
-        /// Номер записи в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название данного объекта доступа.
-        /// </summary>
-        public string Name { get; set; }
-
         /// <summary>
         /// Список ролей, которые имеют доступ к данному объекту.
         /// </summary>

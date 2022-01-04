@@ -34,20 +34,20 @@ namespace DebtorsProcessing.DatabaseModel
                 .Entity<UserRole>()
                 .HasMany(p => p.Users)
                 .WithMany(p => p.UserRoles)
-                .UsingEntity(j => j.ToTable("Users_Roles"));
+                .UsingEntity(j => j.ToTable("UserInRole"));
 
 
             modelBuilder
                 .Entity<UserRole>()
                 .HasMany(p => p.Objects)
                 .WithMany(p => p.Roles)
-                .UsingEntity(j => j.ToTable("Roles_Objects"));
+                .UsingEntity(j => j.ToTable("ObjectInRole"));
 
             modelBuilder
                 .Entity<UserRole>()
                 .HasMany(p => p.UsedInSessions)
                 .WithMany(p => p.Roles)
-                .UsingEntity(j => j.ToTable("Roles_Sessions"));
+                .UsingEntity(j => j.ToTable("RoleInSession"));
 
             modelBuilder
                 .Entity<User>()
@@ -123,10 +123,12 @@ namespace DebtorsProcessing.DatabaseModel
             {
                 FullName = "Ivanov Ivan Ivanovich",
                 ContractNumber = "8357325235273",
-                PassportSeries = 1234,
-                PassportNumber = 123456,
-                RegistrationAddress = "Bla bla bla",
                 StartDebt = 1234,
+                RegistrationRegion = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name="Москва"
+                },
                 Payments = new List<DebtorPayment>()
                 {
                     new() {Amount = 123, Date = DateTime.Today}

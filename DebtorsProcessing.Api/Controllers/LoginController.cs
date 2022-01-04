@@ -86,11 +86,11 @@ namespace DebtorsProcessing.Api.Controllers
         /// <returns>Результат генерации токена.</returns>
         private async Task<AuthResult> GenerateLoginJwt(User user)
         {
-            JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler jwtTokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
-                Subject = new ClaimsIdentity(new[]
+                Subject = new(new[]
                 {
                     new Claim(nameof(DatabaseModel.Entities.User.Id),user.Id.ToString()),
                     new Claim(nameof(DatabaseModel.Entities.User.Login), user.Login),
@@ -105,12 +105,12 @@ namespace DebtorsProcessing.Api.Controllers
             SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptor);
             string jwtToken = jwtTokenHandler.WriteToken(token);
 
-            LoginRefreshToken refreshToken = new LoginRefreshToken()
+            LoginRefreshToken refreshToken = new()
             {
                 JwtId = token.Id,
                 IsUsed = false,
                 IsRevoked = false,
-                UserId = user.Id,
+                RecordId = user.Id,
                 CreatedOn = DateTime.UtcNow,
                 ExpiryTime = DateTime.UtcNow.AddMonths(1),
                 Token = $"{Guid.NewGuid()}-{Guid.NewGuid()}"
@@ -118,7 +118,7 @@ namespace DebtorsProcessing.Api.Controllers
 
             await refreshTokensRepository.AddRefreshTokenAsync(refreshToken);
 
-            return new AuthResult()
+            return new()
             {
                 Success = true,
                 Token = jwtToken,

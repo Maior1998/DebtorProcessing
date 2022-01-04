@@ -11,5 +11,19 @@ namespace DebtorsProcessing.Api.EntitySecurityManagers.UserRolesSecurityManagers
     public class RoleBasedUserRolesSecurityManager : IUserRolesSecurityManager
     {
         public Expression<Func<UserRole, bool>> CollectionSecurityFilter => throw new NotImplementedException();
+        public bool CanUserCreateEntity(UserRole creatingEntity)
+        {
+            return true;
+        }
+
+        public bool CanUserModifyEntity(UserRole updatingEntity)
+        {
+            return true;
+        }
+
+        public bool CanUserDeleteEntity(UserRole deletingEntity)
+        {
+            return true;
+        }
     }
 }

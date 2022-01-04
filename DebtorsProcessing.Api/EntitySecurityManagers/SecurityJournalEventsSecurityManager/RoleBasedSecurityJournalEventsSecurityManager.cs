@@ -11,5 +11,19 @@ namespace DebtorsProcessing.Api.EntitySecurityManagers.SecurityJournalEventsSecu
     public class RoleBasedSecurityJournalEventsSecurityManager : ISecurityJournalEventsSecurityManager
     {
         public Expression<Func<SecurityJournalEvent, bool>> CollectionSecurityFilter => throw new NotImplementedException();
+        public bool CanUserCreateEntity(SecurityJournalEvent creatingEntity)
+        {
+            return true;
+        }
+
+        public bool CanUserModifyEntity(SecurityJournalEvent updatingEntity)
+        {
+            return true;
+        }
+
+        public bool CanUserDeleteEntity(SecurityJournalEvent deletingEntity)
+        {
+            return true;
+        }
     }
 }

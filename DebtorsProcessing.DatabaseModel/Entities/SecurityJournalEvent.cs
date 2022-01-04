@@ -5,15 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DebtorsProcessing.DatabaseModel.Abstractions;
 
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     [Table("SecurityJournalEvents")]
-    public class SecurityJournalEvent
+    public record SecurityJournalEvent : BaseEntity
     {
-        public Guid Id { get; set; }
-        [Required]
-        public DateTime? CreatedOn { get; set; }
         public Guid? RelatedUserId { get; set; }
         public User RelatedUser { get; set; }
         [Required]

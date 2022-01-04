@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DebtorsProcessing.DatabaseModel.Abstractions;
 
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет сеанс пользователя.
     /// </summary>
-    public record UserSession
+    public record UserSession : BaseEntity
     {
-        /// <summary>
-        /// Номер записи в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Дата-время открытия сеанса пользователя.
         /// </summary>

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
+using DebtorsProcessing.DatabaseModel.Abstractions;
+
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет собой пользователя (субъекта) системы.
     /// </summary>
-    public record User
+    public record User : BaseEntity
     {
 
         public void ResetPassword(string newPassword)
@@ -29,18 +31,13 @@ namespace DebtorsProcessing.DatabaseModel.Entities
             return hash == PasswordHash;
         }
         private const int SALT_LENGTH = 32;
-        private static Random random = new();
+        private static readonly Random random = new();
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
+            return new(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        /// <summary>
-        /// Номер записи в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// ФИО пользователя.
         /// </summary>

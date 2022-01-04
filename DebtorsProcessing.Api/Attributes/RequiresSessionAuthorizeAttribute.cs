@@ -15,7 +15,7 @@ namespace DebtorsProcessing.Api.Attributes
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (UserSession)context.HttpContext.Items["Session"];
+            UserSession user = (UserSession)context.HttpContext.Items["Session"];
             if (user == null)
             {
                 // not logged in

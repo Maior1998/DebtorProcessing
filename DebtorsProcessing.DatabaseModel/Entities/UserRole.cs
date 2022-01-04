@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DebtorsProcessing.DatabaseModel.Abstractions;
+
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет собой роль пользователя системы.
     /// </summary>
-    public record UserRole
+    public record UserRole : BaseLookup
     {
-
-        /// <summary>
-        /// Номер записи в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название этой роли.
-        /// </summary>
-        public string Name { get; set; }
 
         /// <summary>
         /// Список пользователей, имеющих данную роль.
@@ -32,9 +24,6 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         public ICollection<UserSession> UsedInSessions { get; set; } = new List<UserSession>();
 
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        
     }
 }

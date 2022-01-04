@@ -31,18 +31,18 @@ namespace DebtorsProcessing.Api.Middleware
             string token = context.Request.Headers[ConfigurationCostants.LoginAuthenticationScheme].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachUserToContext(context, userService, token);
+                await AttachUserToContext(context, userService, token);
 
             await next(context);
         }
 
-        private void attachUserToContext(HttpContext context, IUsersRepository userService, string token)
+        private async Task AttachUserToContext(HttpContext context, IUsersRepository userService, string token)
         {
             try
             {
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityTokenHandler tokenHandler = new();
                 byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                tokenHandler.ValidateToken(token, new()
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -56,7 +56,7 @@ namespace DebtorsProcessing.Api.Middleware
                 Guid userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(User.Id)).Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetEntityById(userId).Result;
+                context.Items["User"] = await userService.GetEntityById(userId);
             }
             catch (Exception ex)
             {

@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using DebtorsProcessing.DatabaseModel.Abstractions;
+
 namespace DebtorsProcessing.DatabaseModel.Entities
 {
     /// <summary>
     /// Представляет собой должника.
     /// </summary>
-    public record Debtor
+    public record Debtor : BaseEntity
     {
-        /// <summary>
-        /// Уникальный номер в базе данных.
-        /// </summary>
-        public Guid Id { get; set; }
-
-
         public Guid? ResponsibleId { get; set; }
 
         /// <summary>
@@ -28,27 +24,20 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         public string ContractNumber { get; set; }
 
         /// <summary>
-        /// Серия паспорта.
-        /// </summary>
-        public ushort PassportSeries { get; set; }
-
-        /// <summary>
-        /// Номер паспорта.
-        /// </summary>
-        public uint PassportNumber { get; set; }
-
-        /// <summary>
         /// ФИО данного должника.
         /// </summary>
         public string FullName { get; set; }
-
         /// <summary>
-        /// Адрес регистрации данного должника.
+        /// Id региона регистрации должника.
         /// </summary>
-        public string RegistrationAddress { get; set; }
+        public Guid? RegistrationRegionId { get; set; }
+        /// <summary>
+        /// Регион регистрации должника.
+        /// </summary>
+        public Region RegistrationRegion { get; set; }
 
         /// <summary>
-        /// Стартовые долг данного должника.
+        /// Стартовый долг должника.
         /// </summary>
         public decimal StartDebt { get; set; }
 

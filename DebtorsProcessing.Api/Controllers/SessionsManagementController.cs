@@ -22,7 +22,7 @@ namespace DebtorsProcessing.Api.Controllers
     [RequiresLoginAuthorize]
     public class SessionsManagementController : ControllerBase
     {
-        private Guid userId;
+        private readonly Guid userId;
 
         private readonly IRolesRepository userRolesRepository;
         private readonly ISessionsRepository sessionsRepository;

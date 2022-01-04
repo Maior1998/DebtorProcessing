@@ -14,21 +14,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DebtorsProcessing.DatabaseModel.Abstractions;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DebtorsProcessing.Api.Controllers
 {
     [RequiresLoginAuthorize]
-    public abstract class HelperODataController<T> : ODataController where T : class
+    public abstract class HelperODataController<T> : ODataController where T : BaseEntity
     {
-        public IOdataEntityRepository<T> repository { get; }
-        private IEntitySecurityManager<T> securityManager { get; }
-        private IHttpContextAccessor httpContextAccessor { get; set; }
+        public readonly IOdataEntityRepository<T> Repository;
+
+        private readonly IEntitySecurityManager<T> securityManager;
+        private readonly IHttpContextAccessor httpContextAccessor;
         protected HelperODataController(
             IOdataEntityRepository<T> repository,
             IEntitySecurityManager<T> securityManager,
             IHttpContextAccessor httpContextAccessor) : base()
         {
-            this.repository = repository;
+            this.Repository = repository;
             this.securityManager = securityManager;
             this.httpContextAccessor = httpContextAccessor;
         }
@@ -36,13 +39,13 @@ namespace DebtorsProcessing.Api.Controllers
         [EnableQuery]
         public IQueryable<T> Get()
         {
-            return repository.GetAllEntities().Where(securityManager.CollectionSecurityFilter);
+            return Repository.GetAllEntities().Where(securityManager.CollectionSecurityFilter);
         }
 
         [EnableQuery]
         public SingleResult<T> Get(Guid key)
         {
-            return SingleResult.Create(repository.GetEntity(key).Where(securityManager.CollectionSecurityFilter));
+            return SingleResult.Create(Repository.GetEntity(key).Where(securityManager.CollectionSecurityFilter));
         }
 
         public async Task<IActionResult> Post(T entity)
@@ -51,7 +54,11 @@ namespace DebtorsProcessing.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-                await repository.AddEntity(entity);
+            if (!securityManager.CanUserCreateEntity(entity))
+            {
+                return Forbid();
+            }
+            await Repository.AddEntity(entity);
             return Created(entity);
         }
 
@@ -62,13 +69,18 @@ namespace DebtorsProcessing.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await repository.GetEntityById(key);
+            T entity = await Repository.GetEntityById(key);
             if (entity == null)
             {
                 return NotFound();
             }
+
+            if (!securityManager.CanUserModifyEntity(entity))
+            {
+                return Forbid();
+            }
             product.Patch(entity);
-            await repository.UpdateEntity(entity);
+            await Repository.UpdateEntity(entity);
             return Updated(entity);
         }
 
@@ -78,19 +90,22 @@ namespace DebtorsProcessing.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            await repository.UpdateEntity(update);
+            if (!securityManager.CanUserModifyEntity(update))
+            {
+                return Forbid();
+            }
+            await Repository.UpdateEntity(update);
             return Updated(update);
         }
 
         public async Task<IActionResult> Delete([FromODataUri] Guid key)
         {
-            var product = await repository.GetEntityById(key);
+            T product = await Repository.GetEntityById(key);
             if (product == null)
             {
                 return NotFound();
             }
-            await repository.DeleteEntity(key);
+            await Repository.DeleteEntity(key);
             return NoContent();
         }
     }

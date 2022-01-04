@@ -29,7 +29,7 @@ namespace DebtorsProcessing.Api.Middleware
 
         public async Task Invoke(HttpContext context, ISessionsRepository sessionsRepository)
         {
-            var token = context.Request.Headers[ConfigurationCostants.SessionAuthenticationScheme].FirstOrDefault()?.Split(" ").Last();
+            string token = context.Request.Headers[ConfigurationCostants.SessionAuthenticationScheme].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
                 await attachUserToContext(context, sessionsRepository, token);
@@ -41,9 +41,9 @@ namespace DebtorsProcessing.Api.Middleware
         {
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                JwtSecurityTokenHandler tokenHandler = new();
+                byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
+                tokenHandler.ValidateToken(token, new()
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -53,8 +53,8 @@ namespace DebtorsProcessing.Api.Middleware
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(UserSession.Id)).Value);
+                JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
+                Guid userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(UserSession.Id)).Value);
 
                 // attach user to context on successful jwt validation
                 context.Items["Session"] = await sessionsRepository.FindSessionById(userId);

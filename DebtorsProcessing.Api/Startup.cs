@@ -30,6 +30,7 @@ using Microsoft.OpenApi.Models;
 
 using System;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace DebtorsProcessing.Api
 {
@@ -83,7 +84,7 @@ namespace DebtorsProcessing.Api
                 });
             services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo
+                    c.SwaggerDoc("v1", new()
                     {
                         Title = "DebtorsProcessing.Api",
                         Version = "v1"
@@ -95,41 +96,82 @@ namespace DebtorsProcessing.Api
         {
             services.AddSwaggerGen(c =>
             {
-                c.AddSecurityDefinition(nameof(ConfigurationCostants.LoginAuthenticationScheme), new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Description = "Please provide a login token",
-                    Name = ConfigurationCostants.LoginAuthenticationScheme
-                });
 
-                c.AddSecurityDefinition(nameof(ConfigurationCostants.SessionAuthenticationScheme), new OpenApiSecurityScheme
+                var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
+                    Name = "JWT Authentication",
                     In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Description = "Please provide a session token",
-                    Name = ConfigurationCostants.SessionAuthenticationScheme
-                });
+                    Type = SecuritySchemeType.Http,
+                    Description = "Please provide a **_LOGIN_** token",
 
+                    Reference = new OpenApiReference
+                    {
+                        Id = ConfigurationCostants.LoginAuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    },
-
+                    { jwtSecurityScheme, Array.Empty<string>() }
                 });
+                jwtSecurityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT",
+                    Name = "JWT Authentication",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Please provide a **_SESSION_** token",
+
+                    Reference = new OpenApiReference
+                    {
+                        Id = ConfigurationCostants.SessionAuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
+                });
+                //c.AddSecurityDefinition(nameof(ConfigurationCostants.LoginAuthenticationScheme), new()
+                //{
+                //    Type = SecuritySchemeType.Http,
+                //    BearerFormat = "JWT",
+                //    In = ParameterLocation.Header,
+                //    Scheme = "bearer",
+                //    Description = "Please provide a login token",
+                //    Name = ConfigurationCostants.LoginAuthenticationScheme
+                //});
+
+                //c.AddSecurityDefinition(nameof(ConfigurationCostants.SessionAuthenticationScheme), new()
+                //{
+                //    Type = SecuritySchemeType.Http,
+                //    BearerFormat = "JWT",
+                //    In = ParameterLocation.Header,
+                //    Scheme = "bearer",
+                //    Description = "Please provide a session token",
+                //    Name = ConfigurationCostants.SessionAuthenticationScheme
+                //});
+
+                //c.AddSecurityRequirement(new()
+                //{
+                //    {
+                //        new()
+                //        {
+                //            Reference = new()
+                //            {
+                //                Type = ReferenceType.SecurityScheme,
+                //                Id = "bearer"
+                //            }
+                //        },
+                //        Array.Empty<string>()
+                //    },
+
+                //});
 
             });
         }

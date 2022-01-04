@@ -85,7 +85,7 @@ namespace DebtorsProcessing.Desktop.ViewModel
 
 
         private DelegateCommand changeUserPassword;
-        public DelegateCommand ChangeUserPassword => changeUserPassword ??= new DelegateCommand(() =>
+        public DelegateCommand ChangeUserPassword => changeUserPassword ??= new(() =>
         {
             ChangePasswordWindow changePasswordWindow = new();
             if (!changePasswordWindow.ShowDialog().Value) return;

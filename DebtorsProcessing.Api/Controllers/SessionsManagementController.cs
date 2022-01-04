@@ -8,6 +8,7 @@ using DebtorsProcessing.DatabaseModel.Entities;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using System;
@@ -29,11 +30,12 @@ namespace DebtorsProcessing.Api.Controllers
 
         public SessionsManagementController(
             IRolesRepository userRolesRepository,
-            ISessionsRepository sessionsRepository)
+            ISessionsRepository sessionsRepository,
+            IHttpContextAccessor accessor)
         {
             this.userRolesRepository = userRolesRepository;
             this.sessionsRepository = sessionsRepository;
-            userId = ((User)HttpContext.Items["User"]).Id;
+            userId = ((User)accessor.HttpContext.Items["User"]).Id;
         }
 
         [HttpGet]

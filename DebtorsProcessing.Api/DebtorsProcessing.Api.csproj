@@ -7,20 +7,31 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0-preview.6.21355.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0-preview.6.21355.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0-preview.6.21355.2" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0-preview.6.21355.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0-preview.6.21355.2" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.4" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.15.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.15.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="6.15.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DebtorsProcessing.DatabaseModel\DebtorsProcessing.DatabaseModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="debtors.db-wal" />
+    <None Remove="Microsoft.IdentityModel.JsonWebTokens" />
+    <None Remove="Microsoft.IdentityModel.Logging" />
+    <None Remove="Microsoft.IdentityModel.Protocols" />
+    <None Remove="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
+  </ItemGroup>
 </Project>

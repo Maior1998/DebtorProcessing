@@ -99,7 +99,7 @@ namespace DebtorsProcessing.Api.Controllers
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(20),
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-
+                
             };
 
             SecurityToken token = jwtTokenHandler.CreateToken(tokenDescriptor);

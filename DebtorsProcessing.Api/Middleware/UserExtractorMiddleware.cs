@@ -42,15 +42,18 @@ namespace DebtorsProcessing.Api.Middleware
             {
                 JwtSecurityTokenHandler tokenHandler = new();
                 byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
-                tokenHandler.ValidateToken(token, new()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                TokenValidationParameters tvp =
+                    new()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                        ClockSkew = TimeSpan.Zero
+                    };
+                tokenHandler.ValidateToken(token, tvp, out SecurityToken validatedToken);
 
                 JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
                 Guid userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(User.Id)).Value);

@@ -11,6 +11,5 @@ namespace DebtorsProcessing.Api.Repositories.SessionsRepositories
     {
         public Task<IEnumerable<UserSession>> GetSessionsOfUser(Guid userId);
         public Task<IEnumerable<UserSession>> GetActiveSessionsOfUser(Guid userId);
-        public Task<UserSession> FindSessionById(Guid id);
     }
 }

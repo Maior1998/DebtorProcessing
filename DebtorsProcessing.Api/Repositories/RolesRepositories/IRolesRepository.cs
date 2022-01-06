@@ -11,5 +11,6 @@ namespace DebtorsProcessing.Api.Repositories.RolesRepositories
     {
         public Task<IEnumerable<UserRole>> GetRolesInSession(Guid sessionId);
         public Task<IEnumerable<UserRole>> GetRolesOfUser(Guid userId);
+        
     }
 }

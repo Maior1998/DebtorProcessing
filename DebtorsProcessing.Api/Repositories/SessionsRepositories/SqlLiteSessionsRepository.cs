@@ -6,63 +6,28 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Repositories.SessionsRepositories
 {
-    public class SqlLiteSessionsRepository : ISessionsRepository
+    public class SqlLiteSessionsRepository : BaseSqLiteRepository<UserSession>,ISessionsRepository
     {
-        public async Task<UserSession> FindSessionById(Guid id)
-        {
-            DebtorsContext context = new();
-            return await context.Sessions.SingleOrDefaultAsync(x => x.Id == id);
-        }
         public async Task<IEnumerable<UserSession>> GetSessionsOfUser(Guid userId)
         {
-            DebtorsContext context = new();
-            return await context.Sessions.Where(x => x.User.Id == userId).ToArrayAsync();
+            await using DebtorsContext context = new();
+            return await DbSetFunc(context).Where(x => x.User.Id == userId).ToArrayAsync();
         }
 
         public async Task<IEnumerable<UserSession>> GetActiveSessionsOfUser(Guid userId)
         {
-            DebtorsContext context = new();
-            return await context.Sessions.Where(x => x.User.Id == userId && x.EndDate == null).ToArrayAsync();
+            await using DebtorsContext context = new();
+            return await DbSetFunc(context).Where(x => x.User.Id == userId && x.EndDate == null).ToArrayAsync();
         }
 
-        public IQueryable<UserSession> GetAllEntities()
+        protected override Expression<Func<DebtorsContext, DbSet<UserSession>>> DbSetSelector()
         {
-            return new DebtorsContext().Sessions;
-        }
-
-        public async Task AddEntity(UserSession entity)
-        {
-            DebtorsContext context = new();
-            await context.Sessions.AddAsync(entity);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task DeleteEntity(Guid id)
-        {
-            DebtorsContext context = new();
-            UserSession session = await context.Sessions.SingleAsync(x => x.Id == id);
-            context.Sessions.Remove(session);
-            await context.SaveChangesAsync();
-        }
-
-        public Task<UserSession> GetEntityById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateEntity(UserSession entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<UserSession> GetEntity(Guid id)
-        {
-            DebtorsContext context = new();
-            return context.Sessions.Where(x => x.Id == id);
+            return context => context.Sessions;
         }
     }
 }

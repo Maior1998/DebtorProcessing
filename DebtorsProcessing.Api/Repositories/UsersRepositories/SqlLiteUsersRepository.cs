@@ -6,53 +6,34 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Repositories.UsersRepositories
 {
-    public class SqlLiteUsersRepository : IUsersRepository
+    public class SqlLiteUsersRepository : BaseSqLiteRepository<User>, IUsersRepository
     {
-        public Task<User> FindUserByLogin(string login)
+        public async Task<User> FindUserByLogin(string login)
         {
-            DebtorsContext context = new();
-            return context.Users.SingleOrDefaultAsync(x => x.Login == login);
+            return await GetAllEntities().SingleOrDefaultAsync(x => x.Login == login);
         }
 
-
-        public IQueryable<User> GetAllEntities()
+        public async Task SetUserActiveSession(Guid userId, Guid? sessionId)
         {
-            return new DebtorsContext().Users;
+            User user = await GetEntityById(userId);
+            user.ActiveSessionId = sessionId;
+            await UpdateEntity(user);
         }
 
-        public async Task AddEntity(User entity)
+        public async Task<Guid?> GetUserActiveSession(Guid userId)
         {
-            DebtorsContext context = new();
-            await context.Users.AddAsync(entity);
-            await context.SaveChangesAsync();
+            User user = await GetEntityById(userId);
+            return user.ActiveSessionId;
         }
 
-        public async Task DeleteEntity(Guid id)
+        protected override Expression<Func<DebtorsContext, DbSet<User>>> DbSetSelector()
         {
-            DebtorsContext context = new();
-            User user = await context.Users.SingleAsync(x => x.Id == id);
-            context.Users.Remove(user);
-            await context.SaveChangesAsync();
-        }
-
-        public Task<User> GetEntityById(Guid id)
-        {
-            DebtorsContext context = new();
-            return context.Users.SingleOrDefaultAsync(x => x.Id == id);
-        }
-
-        public Task UpdateEntity(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<User> GetEntity(Guid id)
-        {
-            return new DebtorsContext().Users.Where(x => x.Id == id);
+            return context => context.Users;
         }
     }
 }

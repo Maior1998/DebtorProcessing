@@ -19,10 +19,10 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace DebtorsProcessing.Api.Controllers
 {
-    [RequiresLoginAuthorize]
+    [RequiresSessionAuthorize]
     public abstract class HelperODataController<T> : ODataController where T : BaseEntity
     {
-        public readonly IOdataEntityRepository<T> Repository;
+        private readonly IOdataEntityRepository<T> Repository;
 
         private readonly IEntitySecurityManager<T> securityManager;
         private readonly IHttpContextAccessor httpContextAccessor;

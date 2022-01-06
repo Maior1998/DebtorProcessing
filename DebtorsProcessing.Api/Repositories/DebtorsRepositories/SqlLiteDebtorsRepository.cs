@@ -6,47 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Repositories.DebtorsRepositories
 {
-    public class SqlLiteDebtorsRepository : IDebtorsRepository
+    public class SqlLiteDebtorsRepository : BaseSqLiteRepository<Debtor>,IDebtorsRepository
     {
-        public async Task AddEntity(Debtor entity)
+        protected override Expression<Func<DebtorsContext, DbSet<Debtor>>> DbSetSelector()
         {
-            DebtorsContext context = new();
-            await context.Debtors.AddAsync(entity);
-            await context.SaveChangesAsync();
+            return context => context.Debtors;
         }
 
-        public async Task DeleteEntity(Guid id)
-        {
-            DebtorsContext context = new();
-            Debtor debtor = await context.Debtors.SingleAsync(x => x.Id == id);
-            context.Debtors.Remove(debtor);
-            await context.SaveChangesAsync();
-        }
-
-        public IQueryable<Debtor> GetAllEntities()
-        {
-            return new DebtorsContext().Debtors;
-        }
-
-        public IQueryable<Debtor> GetEntity(Guid id)
-        {
-            DebtorsContext context = new();
-            return context.Debtors.Where(x => x.Id == id);
-        }
-
-        public async Task<Debtor> GetEntityById(Guid id)
-        {
-            DebtorsContext context = new();
-            return await context.Debtors.SingleOrDefaultAsync(x => x.Id == id);
-        }
-
-        public Task UpdateEntity(Debtor entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

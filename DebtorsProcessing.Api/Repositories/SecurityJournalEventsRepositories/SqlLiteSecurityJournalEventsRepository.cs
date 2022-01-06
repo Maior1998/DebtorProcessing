@@ -3,41 +3,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using DebtorsProcessing.DatabaseModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace DebtorsProcessing.Api.Repositories.SecurityJournalEventsRepositories
 {
-    public class SqlLiteSecurityJournalEventsRepository : ISecurityJournalEventsRepository
-
+    public class SqlLiteSecurityJournalEventsRepository : BaseSqLiteRepository<SecurityJournalEvent>,ISecurityJournalEventsRepository
     {
-        public Task AddEntity(SecurityJournalEvent entity)
+        protected override Expression<Func<DebtorsContext, DbSet<SecurityJournalEvent>>> DbSetSelector()
         {
-            throw new NotImplementedException();
+            return context => context.SecurityJournalEvents;
         }
 
-        public Task DeleteEntity(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<SecurityJournalEvent> GetAllEntities()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<SecurityJournalEvent> GetEntity(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<SecurityJournalEvent> GetEntityById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateEntity(SecurityJournalEvent entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -7,7 +7,7 @@ namespace DebtorsProcessing.Api.Model.Dtos.Responses
 {
     public class ChooseUserSessionDto
     {
-        public int Index { get; set; }
+        public Guid Id { get; set; }
         public DateTime StartSessionTime { get; set; }
         public UserRoleDto[] RolesInSession { get; set; }
     }

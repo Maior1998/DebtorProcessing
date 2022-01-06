@@ -34,4 +34,9 @@
     <None Remove="Microsoft.IdentityModel.Protocols" />
     <None Remove="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Configuration\JwtConfig.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ namespace DebtorsProcessing.Api.Repositories.RefreshTokensRepositories
 {
     public interface IRefreshTokensRepository
     {
-        public Task<LoginRefreshToken> AddRefreshTokenAsync(LoginRefreshToken refreshToken);
+        public Task<LoginRefreshToken> AddLoginRefreshTokenAsync(LoginRefreshToken refreshToken);
+        public Task<SessionRefreshToken> AddSessionRefreshTokenAsync(SessionRefreshToken refreshToken);
     }
 }

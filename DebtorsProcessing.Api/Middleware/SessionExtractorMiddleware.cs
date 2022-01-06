@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DebtorsProcessing.Api.Repositories.UsersRepositories;
 
 namespace DebtorsProcessing.Api.Middleware
 {
@@ -27,22 +28,26 @@ namespace DebtorsProcessing.Api.Middleware
             jwtConfig = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, ISessionsRepository sessionsRepository)
+        public async Task Invoke(HttpContext context,IUsersRepository usersRepository, ISessionsRepository sessionsRepository)
         {
             string token = context.Request.Headers[ConfigurationCostants.SessionAuthenticationScheme].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await attachUserToContext(context, sessionsRepository, token);
+                await AttachSessionToContext(context, sessionsRepository,usersRepository, token);
 
             await next(context);
         }
 
-        private async Task attachUserToContext(HttpContext context, ISessionsRepository sessionsRepository, string token)
+        private async Task AttachSessionToContext(
+            HttpContext context,
+            ISessionsRepository sessionsRepository,
+            IUsersRepository usersRepository,
+            string token)
         {
             try
             {
                 JwtSecurityTokenHandler tokenHandler = new();
-                byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
+                byte[] key = Encoding.ASCII.GetBytes(jwtConfig.SessionSecret);
                 tokenHandler.ValidateToken(token, new()
                 {
                     ValidateIssuerSigningKey = true,
@@ -54,13 +59,17 @@ namespace DebtorsProcessing.Api.Middleware
                 }, out SecurityToken validatedToken);
 
                 JwtSecurityToken jwtToken = (JwtSecurityToken)validatedToken;
-                Guid userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(UserSession.Id)).Value);
-
+                Guid sessionId = Guid.Parse(jwtToken.Claims.First(x => x.Type == nameof(UserSession.Id)).Value);
+                UserSession session = await sessionsRepository.GetEntityById(sessionId);
+                if (session.UserId == null) return;
+                User user = await usersRepository.GetEntityById(session.UserId.Value);
+                if(user.ActiveSessionId == null || user.ActiveSessionId != sessionId) return;
                 // attach user to context on successful jwt validation
-                context.Items["Session"] = await sessionsRepository.FindSessionById(userId);
+                context.Items["Session"] = session;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message + ex.StackTrace);
                 // do nothing if jwt validation fails
                 // user is not attached to context so request won't have access to secure routes
             }

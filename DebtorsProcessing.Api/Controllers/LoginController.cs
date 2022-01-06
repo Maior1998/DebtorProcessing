@@ -116,7 +116,7 @@ namespace DebtorsProcessing.Api.Controllers
                 Token = $"{Guid.NewGuid()}-{Guid.NewGuid()}"
             };
 
-            await refreshTokensRepository.AddRefreshTokenAsync(refreshToken);
+            await refreshTokensRepository.AddLoginRefreshTokenAsync(refreshToken);
 
             return new()
             {

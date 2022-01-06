@@ -10,6 +10,8 @@ namespace DebtorsProcessing.Api.Repositories.UsersRepositories
     public interface IUsersRepository : IOdataEntityRepository<User>
     {
         public Task<User> FindUserByLogin(string login);
+        public Task SetUserActiveSession(Guid userId, Guid? sessionId);
+        public Task<Guid?> GetUserActiveSession(Guid userId);
 
 
     }

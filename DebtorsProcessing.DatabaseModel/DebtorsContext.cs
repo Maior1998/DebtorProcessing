@@ -79,6 +79,11 @@ namespace DebtorsProcessing.DatabaseModel
                 .HasMany(x => x.Events)
                 .WithOne(x => x.Type)
                 .HasForeignKey(x => x.TypeId);
+
+            modelBuilder.Entity<User>()
+                .HasOne(x => x.ActiveSession)
+                .WithOne(x => x.UserByActiveSession)
+                .HasForeignKey<User>(x => x.ActiveSessionId);
         }
 
         public virtual DbSet<LoginRefreshToken> LoginRefreshTokens { get; set; }

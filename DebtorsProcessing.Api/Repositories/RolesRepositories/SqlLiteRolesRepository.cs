@@ -6,11 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Repositories.RolesRepositories
 {
-    public class SqlLiteRolesRepository : IRolesRepository
+    public class SqlLiteRolesRepository : BaseSqLiteRepository<UserRole>,IRolesRepository
     {
         public async Task<IEnumerable<UserRole>> GetRolesOfUser(Guid userId)
         {
@@ -22,6 +23,11 @@ namespace DebtorsProcessing.Api.Repositories.RolesRepositories
         {
             DebtorsContext context = new();
             return await context.UserRoles.Where(x => x.UsedInSessions.Any(x => x.Id == sessionId)).ToArrayAsync();
+        }
+
+        protected override Expression<Func<DebtorsContext, DbSet<UserRole>>> DbSetSelector()
+        {
+            return context => context.UserRoles;
         }
 
         public IQueryable<UserRole> GetAllEntities()

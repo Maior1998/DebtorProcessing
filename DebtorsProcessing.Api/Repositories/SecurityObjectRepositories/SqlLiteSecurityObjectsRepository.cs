@@ -6,16 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DebtorsProcessing.Api.Repositories.SecurityObjectRepositories
 {
-    public class SqlLiteSecurityObjectsRepository : ISecurityObjectsRepository
+    public class SqlLiteSecurityObjectsRepository : BaseSqLiteRepository<SecurityObject>,ISecurityObjectsRepository
     {
 
         public async Task<IEnumerable<SecurityObject>> GetObjectsInSession(Guid sessionId)
         {
-            DebtorsContext context = new();
+            await using DebtorsContext context = new();
             UserSession session = await context.Sessions
                 .Include(x => x.Roles)
                 .ThenInclude(x => x.Objects)
@@ -24,6 +25,11 @@ namespace DebtorsProcessing.Api.Repositories.SecurityObjectRepositories
             IEnumerable<SecurityObject> objects = session.Roles.Aggregate(
                 Enumerable.Empty<SecurityObject>(), (old, role) => role.Objects.Union(old));
             return objects;
+        }
+
+        protected override Expression<Func<DebtorsContext, DbSet<SecurityObject>>> DbSetSelector()
+        {
+            return context => context.SecurityObjects;
         }
     }
 }

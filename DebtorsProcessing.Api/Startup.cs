@@ -65,8 +65,8 @@ namespace DebtorsProcessing.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.Configure<JwtConfig>(Configuration.GetSection(nameof(JwtConfig)));
+            IConfigurationSection section = Configuration.GetSection(nameof(JwtConfig));
+            services.Configure<JwtConfig>(section);
             AddRepositories(services);
             AddSecurityManagers(services);
 
@@ -79,7 +79,7 @@ namespace DebtorsProcessing.Api
                 .AddOData(opt =>
                 {
                     opt.AddRouteComponents("odata", GetEdmModel()).EnableQueryFeatures(5);
-                    opt.RouteOptions.EnableKeyInParenthesis = true;
+                    opt.RouteOptions.EnableKeyInParenthesis = false;
                     opt.RouteOptions.EnableKeyAsSegment = true;
                 });
             services.AddSwaggerGen(c =>
@@ -97,7 +97,7 @@ namespace DebtorsProcessing.Api
             services.AddSwaggerGen(c =>
             {
 
-                var jwtSecurityScheme = new OpenApiSecurityScheme
+                OpenApiSecurityScheme jwtSecurityScheme = new OpenApiSecurityScheme
                 {
                     Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",

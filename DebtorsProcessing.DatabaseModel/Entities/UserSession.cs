@@ -26,6 +26,8 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// Пользователь, вошедший в систему (открывший сеанс).
         /// </summary>
         public User User { get; set; }
+        
+        public User UserByActiveSession { get; set; }
 
         /// <summary>
         /// Список ролей, с которыми пользователь вошел в данный сеанс.

@@ -97,6 +97,9 @@ namespace DebtorsProcessing.DatabaseModel.Entities
             return Sb.ToString();
         }
 
+        public Guid? ActiveSessionId { get; set; }
+        public UserSession ActiveSession { get; set; }
+        
         /// <summary>
         /// Получает хеш из пароля пользователя.
         /// </summary>

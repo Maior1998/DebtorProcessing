@@ -25,6 +25,12 @@ namespace DebtorsProcessing.Api.Repositories.SessionsRepositories
             return await DbSetFunc(context).Where(x => x.User.Id == userId && x.EndDate == null).ToArrayAsync();
         }
 
+        protected override void BeforeAddingEntity(DbContext db, UserSession entity)
+        {
+            foreach (UserRole role in entity.Roles)
+                db.Attach(role).State = EntityState.Unchanged;
+        }
+
         protected override Expression<Func<DebtorsContext, DbSet<UserSession>>> DbSetSelector()
         {
             return context => context.Sessions;

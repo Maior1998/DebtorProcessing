@@ -17,7 +17,7 @@ public abstract class BaseSqLiteRepository<T> : IOdataEntityRepository<T> where 
 
     public IQueryable<T> GetAllEntities()
     {
-        using DebtorsContext db = new();
+        DebtorsContext db = new();
         return DbSetFunc(db);
     }
     public IQueryable<T> GetEntity(Guid id)

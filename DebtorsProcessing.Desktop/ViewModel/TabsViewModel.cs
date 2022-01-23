@@ -11,6 +11,7 @@ using ReactiveUI;
 
 using System;
 using System.Windows;
+using DebtorsProcessing.Desktop.Model;
 
 namespace DebtorsProcessing.Desktop.ViewModel
 {
@@ -30,14 +31,11 @@ namespace DebtorsProcessing.Desktop.ViewModel
         private AsyncCommand exit;
         public AsyncCommand Exit => exit ??= new(async () =>
         {
-
+            await ServiceTalker.DropCurrentSession();
+            Console.WriteLine();
             Session.UserId = Guid.Empty;
             if (MessageBox.Show("Сохранить сеанс для последующего входа?", "Выход из программы", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
-                DebtorsContext db = new ();
-                UserSession session = await db.Sessions.SingleAsync(x => x.Id == Session.UserSession.Id);
-                session.EndDate = DateTime.Now;
-                await db.SaveChangesAsync();
             }
             Session.UserSession = null;
             Application.Current.Dispatcher.Invoke(() =>

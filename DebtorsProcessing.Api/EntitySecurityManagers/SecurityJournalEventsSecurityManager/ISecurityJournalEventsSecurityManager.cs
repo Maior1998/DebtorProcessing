@@ -9,5 +9,6 @@ namespace DebtorsProcessing.Api.EntitySecurityManagers.SecurityJournalEventsSecu
 {
     public interface ISecurityJournalEventsSecurityManager : IEntitySecurityManager<SecurityJournalEvent>
     {
+        
     }
 }

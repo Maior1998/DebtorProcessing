@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace DebtorsProcessing.Api.Model.Dtos.Responses
+namespace DebtorsProcessing.Api.Dtos.Responses
 {
     /// <summary>
     /// Ответ на запрос авторизаци со стороны пользователя.

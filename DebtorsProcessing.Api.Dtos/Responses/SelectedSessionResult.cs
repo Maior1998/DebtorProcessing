@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DebtorsProcessing.Api.Model.Dtos.Responses;
+namespace DebtorsProcessing.Api.Dtos.Responses;
 
 public record SelectedSessionResult
 {

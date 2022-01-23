@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DebtorsProcessing.Api.Model.Dtos.Requests
+namespace DebtorsProcessing.Api.Dtos.Requests
 {
     /// <summary>
     /// Представляет собой объект запроса на авторизацию пользователя.

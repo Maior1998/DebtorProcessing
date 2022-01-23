@@ -14,10 +14,7 @@ namespace DebtorsProcessing.Desktop.Model
             {
                 FullName = "Новый должник",
                 ContractNumber = "123456789",
-                PassportNumber = 123456,
-                PassportSeries = 1234,
                 StartDebt = 100000,
-                RegistrationAddress = "Тестовый адрес регистрации",
                 Payments = new List<DebtorPayment>
                 {
                     new()

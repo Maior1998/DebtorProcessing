@@ -17,73 +17,68 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using DebtorsProcessing.Api.Dtos.Responses;
+using DebtorsProcessing.Desktop.Model;
 
 namespace DebtorsProcessing.Desktop.ViewModel
 {
     public class ChooseSessionViewModel : ReactiveObject
     {
-        private SessionService session;
-        private PageService pageService;
+        private readonly SessionService session;
+        private readonly PageService pageService;
         public ChooseSessionViewModel(SessionService session, PageService pageService)
         {
-            this.session = session;
-            this.pageService = pageService;
-            DebtorsContext context = new();
-            List<UserSession> sessions = context.Sessions
-                .Include(x => x.Roles)
-                .ThenInclude(x => x.Objects)
-                .Where(x => x.User.Id == session.UserId && x.EndDate == null)
-                .OrderBy(x => x.StartDate)
-                .ToList();
-            AvailiableRoles = context.Users.Include(x => x.UserRoles).Single(x => x.Id == session.UserId).UserRoles.Select(x => new SelectRoleItem() { Role = x }).ToArray();
-            Sessions = new(sessions.Select(x => new SelectSessionItem() { Session = x }));
-            Sessions.ToObservableChangeSet().WhenAnyPropertyChanged(nameof(SelectSessionItem.IsChecked)).Subscribe(_ => OnSelectionChanged());
-            Sessions.First().IsChecked = true;
+            try
+            {
+                this.session = session;
+                this.pageService = pageService;
+                task = loadRolesAndSessions();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine();
+            }
         }
 
-        private void OnSelectionChanged()
+        private async Task loadRolesAndSessions()
         {
-            IsNewSessionOptionSelected = SelectedSession.Id == Guid.Empty;
-            IsExistingSessionOptionSelected = !IsNewSessionOptionSelected;
+            IEnumerable<ChooseUserSessionDto> sessions = await ServiceTalker.GetSessions();
+            Sessions = sessions.Select(x => new SelectSessionItem() { Date = x.StartSessionTime, Id = x.Id, RolesString = string.Join(", ", x.RolesInSession.Select(y => y.Name)) }).ToArray();
+            IEnumerable<UserRoleDto> roles = await ServiceTalker.GetRoles();
+            AvailiableRoles = roles.Select(x => new SelectRoleItem() { Role = new() { Name = x.Name, Id = x.Id } }).ToArray();
         }
 
-        [Reactive] public bool IsNewSessionOptionSelected { get; set; }
-        [Reactive] public bool IsExistingSessionOptionSelected { get; set; }
-
-        private AsyncCommand chooseSession;
-        public AsyncCommand ChooseSession => chooseSession ??= new(async () =>
+        private static Task task;
+        private AsyncCommand<SelectSessionItem> chooseSession;
+        public AsyncCommand<SelectSessionItem> ChooseSession => chooseSession ??= new(async (userSession) =>
         {
-            session.UserSession = SelectedSession;
+            await ServiceTalker.SelectSession(userSession.Id);
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() => pageService.NavigateWithoutHistoryCommand.Execute(new TabsView()));
         });
 
         private AsyncCommand createSession;
         public AsyncCommand CreateSession => createSession ??= new(async () =>
         {
-            Guid[] selectedRoles = AvailiableRoles.Select(x => x.Role.Id).ToArray();
-            DebtorsContext db = new();
-            UserRole[] roles = await db.UserRoles.Where(x => selectedRoles.Contains(x.Id)).ToArrayAsync();
-            User user = await db.Users.SingleAsync(x => x.Id == session.UserId);
-            UserSession newSession = new()
-            {
-                Id = Guid.NewGuid(),
-                StartDate = DateTime.Now,
-                Roles = roles,
-                User = user
-            };
-            db.Sessions.Add(newSession);
-            await db.SaveChangesAsync();
-            session.UserSession = newSession;
+            Guid[] selectedRoles = AvailiableRoles.Where(x => x.IsChecked).Select(x => x.Role.Id).ToArray();
+            var createdSession = await ServiceTalker.CreateSesion(selectedRoles);
+            var selectedSession = await ServiceTalker.SelectSession(createdSession);
+            Console.WriteLine();
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() => pageService.NavigateWithoutHistoryCommand.Execute(new TabsView()));
         }, () => AvailiableRoles != null && AvailiableRoles.Any(x => x.IsChecked));
 
 
-        private UserSession SelectedSession => Sessions.First(x => x.IsChecked).Session;
-        public ObservableCollection<SelectSessionItem> Sessions { get; set; } = new();
+        [Reactive] public SelectSessionItem[] Sessions { get; set; }
 
-        public SelectRoleItem[] AvailiableRoles { get; set; } = new SelectRoleItem[0];
+        [Reactive] public SelectRoleItem[] AvailiableRoles { get; set; }
 
-        [Reactive] public SecurityObject[] AcessedObjects { get; set; } = new SecurityObject[0];
+        public record SelectSessionItem
+        {
+            public DateTime Date { get; set; }
+            public string RolesString { get; set; }
+            public Guid Id { get; set; }
+        }
 
         public class SelectRoleItem : ReactiveObject
         {
@@ -91,10 +86,5 @@ namespace DebtorsProcessing.Desktop.ViewModel
             [Reactive] public bool IsChecked { get; set; }
         }
 
-        public class SelectSessionItem : ReactiveObject
-        {
-            public UserSession Session { get; set; }
-            [Reactive] public bool IsChecked { get; set; }
-        }
     }
 }

@@ -17,9 +17,11 @@
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
+    <PackageReference Include="RestSharp" Version="107.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DebtorsProcessing.Api.Dtos\DebtorsProcessing.Api.Dtos.csproj" />
     <ProjectReference Include="..\DebtorsProcessing.DatabaseModel\DebtorsProcessing.DatabaseModel.csproj" />
   </ItemGroup>
 

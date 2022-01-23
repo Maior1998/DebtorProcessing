@@ -82,7 +82,7 @@ namespace DebtorsProcessing.DatabaseModel
 
             modelBuilder.Entity<User>()
                 .HasOne(x => x.ActiveSession)
-                .WithOne(x => x.UserByActiveSession)
+                .WithOne(x=>x.UserByActiveSession)
                 .HasForeignKey<User>(x => x.ActiveSessionId);
         }
 
@@ -98,7 +98,7 @@ namespace DebtorsProcessing.DatabaseModel
         public virtual DbSet<SecurityJournalEventType> SecurityJournalEventTypes { get; set; }
         public static void CreateTestData(DebtorsContext model)
         {
-            if (model.Debtors.Any()) return;
+            //if (model.Debtors.Any()) return;
             model.Database.EnsureDeleted();
             model.Database.EnsureCreated();
             User bufferUser = new()

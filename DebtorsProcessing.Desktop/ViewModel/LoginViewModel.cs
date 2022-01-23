@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 
 using DebtorsProcessing.DatabaseModel;
 using DebtorsProcessing.DatabaseModel.Entities;
+using DebtorsProcessing.Desktop.Model;
 using DebtorsProcessing.Desktop.Services;
 using DebtorsProcessing.Desktop.View.Pages;
 
@@ -33,21 +35,24 @@ namespace DebtorsProcessing.Desktop.ViewModel
 
         public AsyncCommand LoginCommand => loginCommand ??= new(async () =>
        {
-           string hash = null;
-           DebtorsContext model = new();
-
-           User user = await model.Users
-               .SingleOrDefaultAsync(x =>
-                   x.Login.ToLower() == Login.ToLower()
-                   && x.PasswordHash.ToLower() == hash.ToLower());
-           if (user == null)
+           try
            {
-               MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK, MessageBoxImage.Error);
+               bool result = await ServiceTalker.Login(Login, Password);
+               if (!result)
+               {
+                   MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK,
+                       MessageBoxImage.Error);
+                   return;
+               }
+               Application.Current.Dispatcher.Invoke(() =>
+                   pageService.NavigateCommand.Execute(new ChooseSessionPage()));
+           }
+           catch (Exception ex)
+           {
+               MessageBox.Show($"Произошла ошибка во время аутентификации {ex.Message} {ex.StackTrace}", "Ошибка аутентификации", MessageBoxButton.OK,
+                   MessageBoxImage.Error);
                return;
            }
-
-           sessionService.UserId = user.Id;
-           Application.Current.Dispatcher.Invoke(() => pageService.NavigateCommand.Execute(new ChooseSessionPage()));
 
        }, () => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password));
     }

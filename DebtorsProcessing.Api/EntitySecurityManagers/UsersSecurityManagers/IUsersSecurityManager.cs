@@ -9,5 +9,6 @@ namespace DebtorsProcessing.Api.EntitySecurityManagers.UsersSecurityManagers
 {
     public interface IUsersSecurityManager : IEntitySecurityManager<User>
     {
+        public bool CanUserUpdateOwnPassword(Guid userId);
     }
 }

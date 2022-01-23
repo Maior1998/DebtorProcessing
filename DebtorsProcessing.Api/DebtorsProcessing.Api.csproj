@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DebtorsProcessing.Api.Dtos\DebtorsProcessing.Api.Dtos.csproj" />
     <ProjectReference Include="..\DebtorsProcessing.DatabaseModel\DebtorsProcessing.DatabaseModel.csproj" />
   </ItemGroup>
 
@@ -38,5 +39,8 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Configuration\JwtConfig.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\Dtos\" />
   </ItemGroup>
 </Project>

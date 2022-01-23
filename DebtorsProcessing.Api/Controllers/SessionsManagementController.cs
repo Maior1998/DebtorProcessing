@@ -1,7 +1,6 @@
 ﻿using DebtorsProcessing.Api.Attributes;
 using DebtorsProcessing.Api.Configuration;
 using DebtorsProcessing.Api.Helpers;
-using DebtorsProcessing.Api.Model.Dtos.Responses;
 using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
 using DebtorsProcessing.Api.Repositories.RolesRepositories;
@@ -21,6 +20,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DebtorsProcessing.Api.Dtos.Requests;
+using DebtorsProcessing.Api.Dtos.Responses;
 using DebtorsProcessing.Api.Repositories.UsersRepositories;
 using Microsoft.Extensions.Options;
 
@@ -105,7 +106,7 @@ namespace DebtorsProcessing.Api.Controllers
         {
             IEnumerable<UserSession> sessionsEnum = await sessionsRepository.GetActiveSessionsOfUser(userId);
             UserSession session = sessionsEnum.SingleOrDefault(x => x.Id == sessionId);
-            if (session==null)
+            if (session == null)
                 return BadRequest();
             await usersRepository.SetUserActiveSession(userId, session.Id);
             SelectedSessionResult result = await GenerateSessionJwt(session);
@@ -122,7 +123,7 @@ namespace DebtorsProcessing.Api.Controllers
             await usersRepository.SetUserActiveSession(userId, null);
             return Ok();
         }
-        
+
 
         [HttpPost]
         [Route(nameof(CreateSession))]
@@ -137,17 +138,17 @@ namespace DebtorsProcessing.Api.Controllers
                 return BadRequest();
 
             IEnumerable<UserRole> userRoles = await userRolesRepository.GetRolesOfUser(userId);
-            string[] userRolesAsStrings = userRoles.Select(x => x.Name).ToArray();
+            Guid[] userRoleIds = userRoles.Select(x => x.Id).ToArray();
             UserSession session = new()
-                {
-                    UserId = userId,
-                    CreatedOn = DateTime.Now
-                };
-            foreach (string roleFromRequest in request.Roles)
             {
-                if (!userRolesAsStrings.Contains(roleFromRequest))
+                UserId = userId,
+                CreatedOn = DateTime.Now
+            };
+            foreach (Guid roleFromRequest in request.Roles)
+            {
+                if (!userRoleIds.Contains(roleFromRequest))
                     return Forbid("User hasn't one or more of specified roles");
-                UserRole userRole = userRoles.Single(x => x.Name == roleFromRequest);
+                UserRole userRole = userRoles.Single(x => x.Id == roleFromRequest);
                 session.Roles.Add(userRole);
             }
 
@@ -202,10 +203,5 @@ namespace DebtorsProcessing.Api.Controllers
             };
         }
 
-        public record CreateSessionDto
-        {
-            [Required]
-            public string[] Roles { get; set; }
-        }
     }
 }

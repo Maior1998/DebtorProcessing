@@ -1,10 +1,10 @@
-﻿using DebtorsProcessing.Api.Model.Dtos.Responses;
-using DebtorsProcessing.DatabaseModel.Entities;
+﻿using DebtorsProcessing.DatabaseModel.Entities;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DebtorsProcessing.Api.Dtos.Responses;
 
 namespace DebtorsProcessing.Api.Helpers
 {
@@ -12,7 +12,7 @@ namespace DebtorsProcessing.Api.Helpers
     {
         public static UserRoleDto ToDto(this UserRole userRole)
         {
-            return new() { Name = userRole.Name };
+            return new() { Name = userRole.Name, Id = userRole.Id };
         }
     }
 }

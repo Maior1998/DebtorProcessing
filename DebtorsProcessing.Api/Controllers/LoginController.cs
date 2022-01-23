@@ -1,8 +1,6 @@
 ﻿
 using DebtorsProcessing.Api.Configuration;
 using DebtorsProcessing.Api.Model;
-using DebtorsProcessing.Api.Model.Dtos.Requests;
-using DebtorsProcessing.Api.Model.Dtos.Responses;
 using DebtorsProcessing.Api.Repositories;
 using DebtorsProcessing.Api.Repositories.RefreshTokensRepositories;
 using DebtorsProcessing.Api.Repositories.UsersRepositories;
@@ -19,6 +17,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DebtorsProcessing.Api.Dtos.Requests;
+using DebtorsProcessing.Api.Dtos.Responses;
 
 namespace DebtorsProcessing.Api.Controllers
 {
@@ -72,7 +72,7 @@ namespace DebtorsProcessing.Api.Controllers
                     Success = false,
                     Errors = new() { errorString }
                 });
-            AuthResult result = await GenerateLoginJwt(user);
+            LoginResponse result = await GenerateLoginJwt(user);
             return Ok(result);
 
         }
@@ -84,7 +84,7 @@ namespace DebtorsProcessing.Api.Controllers
         /// </summary>
         /// <param name="user">Пользователь, для которого необходимо сгенрировать пару "токен + токен обновления"</param>
         /// <returns>Результат генерации токена.</returns>
-        private async Task<AuthResult> GenerateLoginJwt(User user)
+        private async Task<LoginResponse> GenerateLoginJwt(User user)
         {
             JwtSecurityTokenHandler jwtTokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(jwtConfig.LoginSecret);
@@ -121,9 +121,8 @@ namespace DebtorsProcessing.Api.Controllers
             return new()
             {
                 Success = true,
-                Token = jwtToken,
+                AuthToken = jwtToken,
                 RefreshToken = refreshToken.Token,
-                FullName = user.FullName
             };
         }
     }

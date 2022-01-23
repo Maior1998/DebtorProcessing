@@ -99,7 +99,7 @@ namespace DebtorsProcessing.DatabaseModel.Entities
 
         public Guid? ActiveSessionId { get; set; }
         public UserSession ActiveSession { get; set; }
-        
+
         /// <summary>
         /// Получает хеш из пароля пользователя.
         /// </summary>
@@ -120,8 +120,19 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// </summary>
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
+        /// <summary>
+        /// Список токенов авторизации, выданных данному пользователю.
+        /// </summary>
         public ICollection<LoginRefreshToken> LoginRefreshTokens { get; set; } = new List<LoginRefreshToken>();
 
+        /// <summary>
+        /// Участие данного пользователя в записях журнала безопасности.
+        /// </summary>
         public ICollection<SecurityJournalEvent> SecurityJournalEvents { get; set; } = new List<SecurityJournalEvent>();
+
+        /// <summary>
+        /// Комментарии, автором которых является данный пользователь.
+        /// </summary>
+        public ICollection<DebtorComment> Comments { get; set; } = new List<DebtorComment>();
     }
 }

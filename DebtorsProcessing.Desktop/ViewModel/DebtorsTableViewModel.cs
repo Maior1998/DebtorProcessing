@@ -91,17 +91,14 @@ namespace DebtorsProcessing.Desktop.ViewModel
 
                 sheet.Cells[1, 1].Value = "Номер КД";
                 sheet.Cells[1, 2].Value = "ФИО";
-                sheet.Cells[1, 3].Value = "Адрес регистрации";
-                sheet.Cells[1, 4].Value = "Начальный долг";
-                sheet.Cells[1, 5].Value = "Текущий долг";
+                sheet.Cells[1, 3].Value = "Начальный долг";
 
                 for (int i = 0; i < Debtors.Length; i++)
                 {
                     sheet.Cells[i + 2, 1].Value = Debtors[i].ContractNumber;
                     sheet.Cells[i + 2, 2].Value = Debtors[i].FullName;
-                    sheet.Cells[i + 2, 3].Value = Debtors[i].RegistrationAddress;
-                    sheet.Cells[i + 2, 4].Value = Debtors[i].StartDebt;
-                    sheet.Cells[i + 2, 5].Value = Debtors[i].CurrentDebt;
+                    sheet.Cells[i + 2, 3].Value = Debtors[i].StartDebt;
+
                 }
 
                 excel.SaveAs(new FileInfo(saveFileName));

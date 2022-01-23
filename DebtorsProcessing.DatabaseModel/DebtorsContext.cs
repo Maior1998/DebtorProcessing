@@ -84,8 +84,18 @@ namespace DebtorsProcessing.DatabaseModel
                 .HasOne(x => x.ActiveSession)
                 .WithOne(x => x.UserByActiveSession)
                 .HasForeignKey<User>(x => x.ActiveSessionId);
-        }
 
+            modelBuilder.Entity<Debtor>()
+                .HasMany(x => x.Comments)
+                .WithOne(x => x.Debtor)
+                .HasForeignKey(x => x.DebtorId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Comments)
+                .WithOne(x => x.Author)
+                .HasForeignKey(x => x.AuthorId);
+        }
+        public virtual DbSet<DebtorComment> DebtorComments { get; set; }
         public virtual DbSet<LoginRefreshToken> LoginRefreshTokens { get; set; }
         public virtual DbSet<SessionRefreshToken> SessionRefreshTokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -132,7 +142,7 @@ namespace DebtorsProcessing.DatabaseModel
                 RegistrationRegion = new()
                 {
                     Id = Guid.NewGuid(),
-                    Name="Москва"
+                    Name = "Москва"
                 },
                 Payments = new List<DebtorPayment>()
                 {

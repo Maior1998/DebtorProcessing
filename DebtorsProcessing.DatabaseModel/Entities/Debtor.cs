@@ -37,6 +37,13 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         public Region RegistrationRegion { get; set; }
 
         /// <summary>
+        /// Индивидуальный счет должника в банке, с которого производится списание долга.
+        /// </summary>
+        public string BankAccount { get; set; }
+
+        public DateTime InWorkFromDate { get; set; }
+
+        /// <summary>
         /// Стартовый долг должника.
         /// </summary>
         public decimal StartDebt { get; set; }
@@ -46,9 +53,7 @@ namespace DebtorsProcessing.DatabaseModel.Entities
         /// </summary>
         public ICollection<DebtorPayment> Payments { get; set; } = new List<DebtorPayment>();
 
-        /// <summary>
-        /// Текущий долг данного должника. Расчитывается как разница между стартовым долгом и суммой всех платежей данного должника.
-        /// </summary>
-        public decimal CurrentDebt => StartDebt - Payments.Sum(x => x.Amount);
+        public ICollection<DebtorComment> Comments { get; set; } = new List<DebtorComment>();
+
     }
 }

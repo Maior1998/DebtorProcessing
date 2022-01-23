@@ -78,6 +78,7 @@ namespace DebtorsProcessing.Desktop.ViewModel
             public DateTime Date { get; set; }
             public string RolesString { get; set; }
             public Guid Id { get; set; }
+            public string String => $"От {Date.ToShortDateString()}. Роли: {RolesString}";
         }
 
         public class SelectRoleItem : ReactiveObject

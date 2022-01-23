@@ -49,7 +49,7 @@ namespace DebtorsProcessing.Desktop.ViewModel
            }
            catch (Exception ex)
            {
-               MessageBox.Show($"Произошла ошибка во время аутентификации {ex.Message} {ex.StackTrace}", "Ошибка аутентификации", MessageBoxButton.OK,
+               MessageBox.Show($"Произошла ошибка во время аутентификации. Проверьте введенные логин и пароль.\n Полный текст ошибки:{ex.Message}", "Ошибка аутентификации", MessageBoxButton.OK,
                    MessageBoxImage.Error);
                return;
            }

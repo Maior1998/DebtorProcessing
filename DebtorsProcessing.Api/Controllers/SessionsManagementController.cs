@@ -142,7 +142,8 @@ namespace DebtorsProcessing.Api.Controllers
             UserSession session = new()
             {
                 UserId = userId,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                StartDate = DateTime.Now
             };
             foreach (Guid roleFromRequest in request.Roles)
             {

@@ -33,14 +33,9 @@
                         <DataTemplate DataType="{x:Type viewModel:ChooseSessionViewModel+SelectSessionItem}">
                             <Button 
                                 CommandParameter="{Binding}"
+                                Content="{Binding String}"
                                 Command="{Binding ElementName=icRolesList, Path=DataContext.ChooseSession}"
                                 >
-                                <Button.Content>
-                                    <DockPanel LastChildFill="False">
-                                        <Label DockPanel.Dock="Left" VerticalAlignment="Center" Content="{Binding RolesString}"/>
-                                        <Label DockPanel.Dock="Right" VerticalAlignment="Center" Content="{Binding Date}"/>
-                                    </DockPanel>
-                                </Button.Content>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

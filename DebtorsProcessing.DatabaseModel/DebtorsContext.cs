@@ -11,6 +11,15 @@ namespace DebtorsProcessing.DatabaseModel
 {
     public class DebtorsContext : DbContext
     {
+        static DebtorsContext()
+        {
+            DebtorsContext context = new();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            CreateTestData(context);
+            context.Dispose();
+        }
+
         public readonly ILoggerFactory MyLoggerFactory;
 
         public DebtorsContext() : base()

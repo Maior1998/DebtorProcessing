@@ -39,8 +39,8 @@ namespace DebtorsProcessing.Desktop.ViewModel
            User user = await model.Users
                .SingleOrDefaultAsync(x =>
                    x.Login.ToLower() == Login.ToLower()
-                   && x.PasswordHash.ToLower() == hash.ToLower());
-           if (user == null)
+                   );
+           if (user == null || user.GetHashedString(Password) != user.PasswordHash)
            {
                MessageBox.Show("Неверный логин или пароль", "Ошибка аутентификации", MessageBoxButton.OK, MessageBoxImage.Error);
                return;
